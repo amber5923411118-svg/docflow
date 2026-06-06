@@ -590,15 +590,27 @@ html,body{background:var(--bg);font-family:'Noto Sans TC',sans-serif;color:var(-
         <span class="lbl">所屬單位</span>
         <select class="inp inp-sel" id="ln-dept">
           <option value="">請選擇單位…</option>
-          <option>行政部</option><option>護理部</option><option>醫務部</option>
-          <option>財務部</option><option>藥劑部</option><option>檢驗科</option>
-          <option>放射科</option><option>社工室</option>
+          <option>護理部</option>
+          <option>精神科</option>
+          <option>感染科</option>
+          <option>醫事申報</option>
+          <option>病歷室</option>
+          <option>會計室</option>
+          <option>人事室</option>
+          <option>總務工務</option>
+          <option>資訊科</option>
+          <option>藥劑科</option>
+          <option>社服室</option>
+          <option>掛號室</option>
+          <option>放射科</option>
+          <option>檢驗科</option>
+          <option>其他</option>
         </select>
       </div>
       <span class="lbl">密碼</span>
       <input class="inp" type="password" id="ln-pw" placeholder="請輸入密碼" onkeydown="if(event.key==='Enter')doLogin()">
       <button class="btn-main" onclick="doLogin()">登　入</button>
-      <div class="lg-hint">預設密碼：人事室 <b>hr123</b>　執行董事 <b>exec123</b>　各單位 <b>dept123</b></div>
+      <div class="lg-hint">預設密碼：人事室 <b>hr123</b>　執行董事 <b>exec123</b>　各單位 <b>dept123</b>　其他 <b>0000</b></div>
     </div>
   </div>
 </div>
@@ -949,10 +961,15 @@ html,body{background:var(--bg);font-family:'Noto Sans TC',sans-serif;color:var(-
           <input type="password" id="pw-ex-old" placeholder="目前密碼">
           <input type="password" id="pw-ex-new" placeholder="新密碼">
         </div>
-        <div class="pw-lbl">各單位密碼</div>
+        <div class="pw-lbl">各單位密碼（護理部～檢驗科）</div>
         <div class="pw-row">
           <input type="password" id="pw-dept-old" placeholder="目前密碼">
           <input type="password" id="pw-dept-new" placeholder="新密碼">
+        </div>
+        <div class="pw-lbl">其他單位密碼（預設 0000）</div>
+        <div class="pw-row">
+          <input type="password" id="pw-other-old" placeholder="目前密碼">
+          <input type="password" id="pw-other-new" placeholder="新密碼">
         </div>
         <button class="btn-sub br" onclick="savePasswords()" style="margin-top:4px">更新密碼</button>
       </div>
@@ -1089,7 +1106,7 @@ html,body{background:var(--bg);font-family:'Noto Sans TC',sans-serif;color:var(-
 <div class="toast" id="toast"></div>
 <script>
 // ═══ CONFIG ═══
-const UNITS=['行政部','護理部','醫務部','財務部','藥劑部','檢驗科','放射科','社工室'];
+const UNITS=['護理部','精神科','感染科','醫事申報','病歷室','會計室','人事室','總務工務','資訊科','藥劑科','社服室','掛號室','放射科','檢驗科','其他'];
 const RETENTION_LABELS={'0':'永久保存','3':'保存 3 年','5':'保存 5 年','10':'保存 10 年','15':'保存 15 年'};
 
 // ═══ API ═══
@@ -1203,9 +1220,17 @@ function goBack(cur){
 }
 
 // ═══ PASSWORD ═══
-function getPW(r){return localStorage.getItem('pw_'+r)||{hr:'hr123',exec:'exec123',dept:'dept123'}[r];}
+function getPW(r){
+  const saved=localStorage.getItem('pw_'+r);
+  if(saved) return saved;
+  return {hr:'hr123',exec:'exec123',dept:'dept123',other:'0000'}[r]||'dept123';
+}
+function getDeptPW(unit){
+  if(unit==='其他') return localStorage.getItem('pw_other')||'0000';
+  return getPW('dept');
+}
 function savePasswords(){
-  const pairs=[['hr','pw-hr'],['exec','pw-ex'],['dept','pw-dept']];
+  const pairs=[['hr','pw-hr'],['exec','pw-ex'],['dept','pw-dept'],['other','pw-other']];
   let changed=0;
   for(const[role,pfx]of pairs){
     const ov=document.getElementById(pfx+'-old').value;
@@ -1216,7 +1241,7 @@ function savePasswords(){
     localStorage.setItem('pw_'+role,nv);changed++;
   }
   toast(changed?`✅ 已更新 ${changed} 組密碼`:'請填寫目前密碼與新密碼');
-  ['pw-hr-old','pw-hr-new','pw-ex-old','pw-ex-new','pw-dept-old','pw-dept-new'].forEach(id=>document.getElementById(id).value='');
+  ['pw-hr-old','pw-hr-new','pw-ex-old','pw-ex-new','pw-dept-old','pw-dept-new','pw-other-old','pw-other-new'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
 }
 
 // ═══ LOGIN ═══
@@ -1233,7 +1258,7 @@ function doLogin(){
   if(role==='dept'){
     deptUnit=document.getElementById('ln-dept').value;
     if(!deptUnit){toast('請選擇單位');return;}
-    if(pw!==getPW('dept')){toast('密碼錯誤');return;}
+    if(pw!==getDeptPW(deptUnit)){toast('密碼錯誤');return;}
     _pageHistory=['p-login'];showPage('p-dept');run(async()=>await initDept());return;
   }
   toast('密碼錯誤');
