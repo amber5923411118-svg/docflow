@@ -1,0 +1,2065 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="公文管理">
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<title>賢德醫院 公文管理</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+
+/* ══════ 大地色＋綠色系 ══════ */
+:root{
+  --bg:       #f5f0e8;
+  --bg2:      #ede8dc;
+  --card:     #faf7f2;
+  --bord:     #d4c9b5;
+  --bord2:    #c2b49a;
+  --ink:      #2c2416;
+  --sub:      #7a6a52;
+  --dim:      #b0a08a;
+  /* 主色：森林綠 */
+  --gn:       #4a7c59;
+  --gn2:      #2d5a3d;
+  --gn-bg:    #eef5f0;
+  --gn-lt:    #c8dfd0;
+  /* 輔色：暖褐 */
+  --br:       #8b6914;
+  --br2:      #6b4f0e;
+  --br-bg:    #fdf3dc;
+  --br-lt:    #f0d98a;
+  /* 石板藍（次要資訊） */
+  --sl:       #4a6b7a;
+  --sl2:      #2d4f5e;
+  --sl-bg:    #eaf2f5;
+  --sl-lt:    #b8d4de;
+  /* 磚紅（警示） */
+  --rd:       #8b3a2a;
+  --rd2:      #6b2518;
+  --rd-bg:    #faecea;
+  --rd-lt:    #e8b4aa;
+  /* 功能色 */
+  --green:    #4a7c59;
+  --amber:    #8b6914;
+  --red:      #8b3a2a;
+  --purple:   #5a4a7a;
+  /* 圓角 */
+  --r:        12px;
+  --r2:       8px;
+  --safe-t:   env(safe-area-inset-top,0px);
+  --safe-b:   env(safe-area-inset-bottom,0px);
+}
+
+html,body{background:var(--bg);font-family:'Noto Sans TC',sans-serif;color:var(--ink);font-size:16px;}
+
+/* ══════ PAGE SYSTEM ══════ */
+.page{display:none;}
+.page.on{display:block;}
+
+/* ══════ 登入頁 ══════ */
+#p-login{
+  background:linear-gradient(145deg,#e8dfc8 0%,#f0e8d5 40%,#dde8de 100%);
+  display:flex;align-items:center;justify-content:center;padding:40px 24px;min-height:100vh;
+}
+.lg-wrap{width:100%;max-width:420px;}
+.lg-logo{text-align:center;margin-bottom:32px;}
+.lg-ico{
+  width:76px;height:76px;border-radius:18px;margin:0 auto 14px;
+  background:linear-gradient(135deg,var(--gn),var(--gn2));
+  display:flex;align-items:center;justify-content:center;
+  font-size:34px;box-shadow:0 8px 28px rgba(45,90,61,.35);
+}
+.lg-hosp{font-size:13px;color:var(--sub);letter-spacing:2.5px;margin-bottom:4px;}
+.lg-title{font-family:'Noto Serif TC',serif;font-size:24px;font-weight:700;color:var(--ink);}
+.lg-card{
+  background:var(--card);border-radius:18px;padding:26px;
+  box-shadow:0 8px 40px rgba(44,36,22,.12),0 2px 8px rgba(0,0,0,.06);
+  border:1px solid var(--bord);
+}
+.lbl{font-size:12px;color:var(--sub);font-weight:700;letter-spacing:1px;
+  text-transform:uppercase;margin-bottom:6px;display:block;}
+.role-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px;}
+.rbtn{
+  padding:14px 4px;border-radius:12px;border:1.5px solid var(--bord);
+  background:var(--bg2);color:var(--sub);font-size:12px;font-family:inherit;
+  cursor:pointer;text-align:center;line-height:1.6;transition:all .18s;
+}
+.rbtn .ri{font-size:22px;display:block;margin-bottom:3px;}
+.rbtn.sel{border-color:var(--gn);background:var(--gn-bg);color:var(--gn2);font-weight:600;}
+.inp{
+  width:100%;padding:13px 14px;background:var(--bg2);
+  border:1.5px solid var(--bord);border-radius:10px;
+  color:var(--ink);font-size:15px;font-family:inherit;
+  outline:none;transition:border .18s;margin-bottom:14px;
+}
+.inp:focus{border-color:var(--gn);}
+.inp::placeholder{color:var(--dim);}
+.inp-sel{appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237a6a52' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 13px center;
+}
+.btn-main{
+  width:100%;padding:15px;border-radius:12px;border:none;
+  background:linear-gradient(135deg,var(--gn),var(--gn2));
+  color:#fff;font-size:16px;font-weight:700;
+  font-family:'Noto Serif TC',serif;letter-spacing:2px;cursor:pointer;
+  box-shadow:0 4px 18px rgba(45,90,61,.35);transition:opacity .15s;
+}
+.btn-main:active{opacity:.85;}
+.lg-hint{margin-top:12px;font-size:12px;color:var(--dim);text-align:center;line-height:1.8;}
+
+/* ══════ APP CHROME ══════ */
+.topbar{
+  height:60px;background:var(--gn2);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 18px;padding-top:var(--safe-t);
+  box-shadow:0 2px 8px rgba(0,0,0,.15);position:sticky;top:0;z-index:100;
+}
+.tb-left{display:flex;align-items:center;gap:10px;}
+.btn-back{
+  background:none;border:none;color:rgba(255,255,255,.85);
+  font-size:28px;cursor:pointer;padding:2px 6px;line-height:1;
+  display:flex;align-items:center;font-weight:300;
+}
+.btn-back:hover{color:#fff;}
+.tb-title{font-family:'Noto Serif TC',serif;font-size:17px;font-weight:700;color:#fff;letter-spacing:.5px;}
+.tb-right{display:flex;align-items:center;gap:8px;}
+.chip{font-size:11px;padding:4px 10px;border-radius:20px;font-weight:600;white-space:nowrap;}
+.chip-gn{background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.35);}
+.chip-br{background:var(--br-bg);color:var(--br2);border:1px solid var(--br-lt);}
+.chip-rd{background:var(--rd-bg);color:var(--rd2);border:1px solid var(--rd-lt);}
+.chip-sl{background:var(--sl-bg);color:var(--sl2);border:1px solid var(--sl-lt);}
+.icobtn{background:none;border:none;color:rgba(255,255,255,.8);font-size:20px;cursor:pointer;padding:4px;}
+.icobtn:hover{color:#fff;}
+
+/* 捲動區 */
+.scroll-body{display:block;}
+.page-body{padding:18px 16px 110px;max-width:720px;margin:0 auto;width:100%;}
+
+/* ══════ 底部導覽列 ══════ */
+.bnav{
+  height:calc(68px + var(--safe-b));
+  background:var(--gn2);
+  display:flex;align-items:flex-start;padding-top:6px;
+  position:fixed;bottom:0;left:0;right:0;z-index:100;
+  box-shadow:0 -2px 12px rgba(0,0,0,.18);
+}
+.nb{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  gap:4px;padding:6px 4px;background:none;border:none;cursor:pointer;
+  transition:all .18s;position:relative;
+}
+.nb-ico{font-size:24px;transition:transform .18s;}
+.nb-lbl{font-size:11px;color:rgba(255,255,255,.55);font-weight:600;letter-spacing:.3px;}
+.nb.on .nb-ico{transform:scale(1.12);}
+.nb.on .nb-lbl{color:#fff;}
+.nb-dot{
+  width:8px;height:8px;border-radius:50%;background:var(--rd-lt);
+  position:absolute;top:4px;right:calc(50% - 16px);
+  border:2px solid var(--gn2);
+}
+
+/* ══════ 統計卡片 ══════ */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px;}
+.stat{
+  background:var(--card);border-radius:12px;padding:14px 6px;
+  text-align:center;border:1px solid var(--bord);
+  box-shadow:0 2px 8px rgba(44,36,22,.06);
+}
+.snum{font-size:28px;font-weight:700;font-family:'Noto Serif TC',serif;}
+.slbl{font-size:11px;color:var(--sub);margin-top:3px;letter-spacing:.3px;}
+
+/* ══════ 區塊標題 ══════ */
+.sec{
+  font-size:12px;font-weight:700;color:var(--sub);
+  letter-spacing:1.5px;text-transform:uppercase;
+  margin:20px 0 12px;padding-left:2px;
+  display:flex;align-items:center;gap:8px;
+}
+.sec::after{content:'';flex:1;height:1px;background:var(--bord);}
+
+/* ══════ tab 按鈕 ══════ */
+.tab-row{display:flex;gap:7px;margin-bottom:16px;flex-wrap:wrap;}
+.fbtn{
+  padding:8px 14px;border-radius:20px;font-size:13px;font-weight:600;
+  font-family:inherit;cursor:pointer;transition:all .18s;
+  border:1.5px solid var(--bord);background:var(--card);color:var(--sub);
+}
+.fbtn.on{background:var(--gn-bg);border-color:var(--gn);color:var(--gn2);}
+.fbtn:hover:not(.on){background:var(--bg2);}
+
+/* ══════ 表單 ══════ */
+.fwrap{
+  background:var(--card);border-radius:var(--r);border:1px solid var(--bord);
+  padding:18px;margin-bottom:16px;
+  box-shadow:0 2px 12px rgba(44,36,22,.06);
+}
+.ftitle{font-size:15px;font-weight:700;color:var(--gn2);margin-bottom:16px;
+  padding-bottom:12px;border-bottom:1px solid var(--bord);}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.ff{grid-column:1/-1;}
+.fg label{font-size:11px;color:var(--sub);letter-spacing:.5px;text-transform:uppercase;
+  display:block;margin-bottom:5px;font-weight:700;}
+.fg input,.fg select,.fg textarea{
+  width:100%;padding:11px 13px;background:var(--bg2);
+  border:1.5px solid var(--bord);border-radius:var(--r2);
+  color:var(--ink);font-size:14px;font-family:inherit;
+  outline:none;transition:border .18s;
+}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--gn);}
+.fg input::placeholder,.fg textarea::placeholder{color:var(--dim);}
+.fg select{appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237a6a52' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;
+}
+.fg textarea{resize:none;height:64px;}
+
+/* 附件區 */
+.file-area{
+  background:var(--sl-bg);border:1.5px dashed var(--sl);
+  border-radius:var(--r2);padding:14px;margin-top:4px;
+}
+.file-area-title{font-size:12px;font-weight:700;color:var(--sl2);margin-bottom:4px;}
+.file-area-hint{font-size:11px;color:var(--sub);line-height:1.7;margin-bottom:8px;}
+.file-area input{
+  width:100%;padding:10px 12px;background:#fff;
+  border:1.5px solid var(--sl);border-radius:8px;
+  color:var(--ink);font-size:13px;font-family:inherit;outline:none;
+}
+
+/* 保存年限選擇 */
+.retention-opts{display:flex;flex-direction:column;gap:7px;margin-top:4px;}
+.ropt{
+  display:flex;align-items:flex-start;gap:10px;padding:11px 13px;
+  border-radius:var(--r2);border:1.5px solid var(--bord);
+  background:var(--bg2);cursor:pointer;transition:all .18s;
+}
+.ropt.sel{border-color:var(--gn);background:var(--gn-bg);}
+.ropt input[type=radio]{margin-top:3px;flex-shrink:0;accent-color:var(--gn);width:16px;height:16px;}
+.ropt-main{font-size:13px;font-weight:600;color:var(--ink);}
+.ropt-sub{font-size:11px;color:var(--sub);margin-top:2px;line-height:1.5;}
+
+/* ══════ 公文卡片 ══════ */
+.doc-card{
+  background:var(--card);border-radius:var(--r);border:1px solid var(--bord);
+  margin-bottom:12px;overflow:hidden;
+  box-shadow:0 2px 10px rgba(44,36,22,.06);
+  transition:box-shadow .18s;
+}
+.doc-card:hover{box-shadow:0 4px 18px rgba(44,36,22,.1);}
+.dc-head{
+  padding:10px 16px;background:var(--bg2);
+  border-bottom:1px solid var(--bord);
+  display:flex;align-items:center;justify-content:space-between;gap:6px;
+}
+.dc-no{font-size:13px;font-weight:700;color:var(--gn2);letter-spacing:.5px;}
+.dc-body{padding:14px 16px;}
+.dc-subj{font-size:15px;font-weight:500;line-height:1.55;margin-bottom:5px;}
+.dc-org{font-size:12px;color:var(--sub);margin-bottom:10px;}
+
+/* badge */
+.bdg-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;}
+.bdg{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:600;}
+.bdg-e{background:var(--sl-bg);color:var(--sl2);border:1px solid var(--sl-lt);}
+.bdg-p{background:#f0eeF8;color:var(--purple);border:1px solid #ccc4e8;}
+.bdg-m{background:var(--gn-bg);color:var(--gn2);border:1px solid var(--gn-lt);}
+.bdg-norm{background:var(--bg2);color:var(--sub);border:1px solid var(--bord);}
+.bdg-imp{background:#f0eeF8;color:var(--purple);border:1px solid #ccc4e8;}
+.bdg-urg{background:var(--br-bg);color:var(--br2);border:1px solid var(--br-lt);}
+.bdg-max{background:var(--rd-bg);color:var(--rd2);border:1px solid var(--rd-lt);}
+.bdg-pend{background:#f0eeF8;color:var(--purple);border:1px solid #ccc4e8;}
+.bdg-wait{background:var(--br-bg);color:var(--br2);border:1px solid var(--br-lt);}
+.bdg-done{background:var(--gn-bg);color:var(--gn2);border:1px solid var(--gn-lt);}
+.bdg-arch{background:var(--bg2);color:var(--dim);border:1px solid var(--bord2);}
+
+/* stage flow */
+.flow{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin:7px 0 10px;}
+.fp{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:600;
+  display:flex;align-items:center;gap:3px;}
+.fp .dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0;}
+.fp-done{background:var(--gn-bg);color:var(--gn2);border:1px solid var(--gn-lt);}
+.fp-cur{background:var(--sl-bg);color:var(--sl2);border:1px solid var(--sl-lt);}
+.fp-wait{background:var(--bg2);color:var(--dim);border:1px solid var(--bord);}
+.fp-arr{color:var(--dim);font-size:12px;}
+
+/* unit pills */
+.urow{display:flex;flex-wrap:wrap;gap:5px;margin:6px 0 10px;}
+.upill{font-size:11px;padding:3px 9px;border-radius:8px;
+  display:flex;align-items:center;gap:3px;font-weight:500;}
+.upill .dot{width:4px;height:4px;border-radius:50%;background:currentColor;flex-shrink:0;}
+.up-done{background:var(--gn-bg);color:var(--gn2);border:1px solid var(--gn-lt);}
+.up-wait{background:var(--br-bg);color:var(--br2);border:1px solid var(--br-lt);}
+
+/* note chip */
+.note-chip{display:inline-flex;align-items:center;gap:4px;
+  font-size:11px;color:var(--br2);background:var(--br-bg);
+  padding:3px 9px;border-radius:8px;border:1px solid var(--br-lt);margin-top:5px;}
+
+/* file link */
+.file-link{display:flex;align-items:center;gap:10px;padding:10px 13px;
+  background:var(--sl-bg);border:1px solid var(--sl-lt);
+  border-radius:var(--r2);margin-top:8px;text-decoration:none;cursor:pointer;}
+.file-link-ico{font-size:20px;flex-shrink:0;}
+.file-link-txt{font-size:12px;color:var(--sl2);font-weight:600;}
+.file-link-sub{font-size:11px;color:var(--sub);}
+.file-none{font-size:11px;color:var(--dim);padding:5px 0;}
+
+/* retention info */
+.retention-tag{display:inline-flex;align-items:center;gap:5px;
+  font-size:11px;color:var(--gn2);background:var(--gn-bg);
+  padding:3px 9px;border-radius:8px;border:1px solid var(--gn-lt);margin-top:5px;}
+
+/* doc actions */
+.dc-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px;}
+.btn-o{padding:9px 14px;border-radius:var(--r2);
+  border:1.5px solid var(--gn);background:transparent;
+  color:var(--gn2);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;}
+.btn-f{padding:9px 14px;border-radius:var(--r2);border:none;
+  background:var(--gn-bg);color:var(--gn2);
+  font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;transition:opacity .15s;}
+.btn-f:active{opacity:.8;}
+.btn-f.br{background:var(--br-bg);color:var(--br2);}
+.btn-f.sl{background:var(--sl-bg);color:var(--sl2);}
+.btn-f.rd{background:var(--rd-bg);color:var(--rd2);}
+.btn-full{
+  width:100%;padding:15px;border-radius:12px;border:none;
+  background:linear-gradient(135deg,var(--gn),var(--gn2));
+  color:#fff;font-size:15px;font-weight:700;
+  font-family:'Noto Serif TC',serif;letter-spacing:1.5px;
+  cursor:pointer;margin-top:10px;transition:opacity .15s;
+  box-shadow:0 4px 14px rgba(45,90,61,.3);
+}
+.btn-full:active{opacity:.85;}
+.btn-full:disabled{background:var(--dim);box-shadow:none;cursor:default;}
+.btn-full.br{background:linear-gradient(135deg,var(--br),var(--br2));
+  box-shadow:0 4px 14px rgba(139,105,20,.25);}
+.btn-full.rd{background:linear-gradient(135deg,var(--rd),var(--rd2));
+  box-shadow:0 4px 14px rgba(139,58,42,.25);}
+
+/* ══════ 搜尋 ══════ */
+.search-wrap{position:relative;margin-bottom:12px;}
+.search-wrap input{width:100%;padding:11px 14px 11px 38px;background:var(--card);
+  border:1.5px solid var(--bord);border-radius:10px;color:var(--ink);
+  font-size:14px;font-family:inherit;outline:none;transition:border .18s;}
+.search-wrap input:focus{border-color:var(--gn);}
+.search-wrap input::placeholder{color:var(--dim);}
+.search-ico{position:absolute;left:12px;top:50%;transform:translateY(-50%);
+  font-size:16px;pointer-events:none;}
+
+/* ══════ 追蹤清單 ══════ */
+.track-hdr{display:grid;grid-template-columns:80px 1fr 58px 52px;
+  gap:4px;padding:9px 12px;background:var(--gn2);
+  border-radius:10px 10px 0 0;
+  font-size:11px;color:rgba(255,255,255,.85);font-weight:700;letter-spacing:.5px;}
+.track-row{display:grid;grid-template-columns:80px 1fr 58px 52px;
+  gap:4px;padding:11px 12px;border:1px solid var(--bord);border-top:none;
+  cursor:pointer;transition:background .15s;}
+.track-row:hover{background:var(--gn-bg);}
+.track-row:last-child{border-radius:0 0 10px 10px;}
+.track-row-no{font-size:12px;font-weight:700;color:var(--gn2);}
+.track-row-subj{font-size:13px;line-height:1.45;}
+.track-row-org{font-size:11px;color:var(--sub);}
+.track-row-cell{font-size:12px;font-weight:600;align-self:center;}
+
+/* ══════ SHEET ══════ */
+.shbg{position:fixed;inset:0;background:rgba(44,36,22,.5);
+  z-index:800;display:none;align-items:flex-end;
+  justify-content:center;backdrop-filter:blur(3px);}
+.shbg.open{display:flex;}
+.sh{background:var(--card);border-radius:18px 18px 0 0;
+  width:100%;max-width:540px;padding:22px 20px;
+  max-height:90vh;overflow-y:auto;
+  border-top:1px solid var(--bord);
+  animation:su .28s ease;}
+@keyframes su{from{transform:translateY(50px);opacity:0}to{transform:none;opacity:1}}
+.sh-handle{width:38px;height:4px;background:var(--bord2);
+  border-radius:2px;margin:0 auto 18px;}
+.sh-title{font-family:'Noto Serif TC',serif;font-size:17px;font-weight:700;
+  color:var(--ink);margin-bottom:18px;text-align:center;}
+.sh-close{width:100%;margin-top:12px;padding:13px;border-radius:10px;
+  border:1.5px solid var(--bord);background:transparent;color:var(--sub);
+  font-size:14px;font-family:inherit;cursor:pointer;}
+
+/* line notify */
+.line-row{display:flex;justify-content:space-between;align-items:center;
+  padding:13px 14px;border-radius:10px;border:1px solid var(--bord);
+  background:var(--bg2);margin-bottom:8px;}
+.lr-name{font-size:14px;font-weight:500;margin-bottom:3px;}
+.lr-st{font-size:11px;font-weight:600;}
+.lr-st.done{color:var(--green);}
+.lr-st.wait{color:var(--amber);}
+.lr-btns{display:flex;gap:6px;}
+.btn-cp{padding:8px 12px;border-radius:8px;border:1.5px solid var(--sl);
+  background:transparent;color:var(--sl2);font-size:12px;font-weight:600;
+  font-family:inherit;cursor:pointer;}
+.btn-ln{padding:8px 12px;border-radius:8px;border:none;background:#06c755;
+  color:#fff;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;}
+
+/* 單位選擇 */
+.unit-sel-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0;}
+.usi{display:flex;align-items:center;gap:10px;padding:12px 14px;
+  border-radius:10px;border:1.5px solid var(--bord);background:var(--bg2);
+  cursor:pointer;transition:all .18s;}
+.usi.on{border-color:var(--gn);background:var(--gn-bg);}
+.usi-box{width:20px;height:20px;border-radius:5px;border:1.5px solid var(--dim);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  font-size:12px;transition:all .18s;}
+.usi.on .usi-box{background:var(--gn2);border-color:var(--gn2);color:#fff;}
+.usi-name{font-size:13px;font-weight:500;}
+
+/* 簽名 */
+.sigwrap{position:relative;border:1.5px dashed var(--bord2);border-radius:10px;
+  background:var(--bg2);overflow:hidden;touch-action:none;margin-bottom:10px;}
+.sighint{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  color:var(--dim);font-size:13px;text-align:center;pointer-events:none;
+  line-height:2;transition:opacity .25s;}
+.sighint.gone{opacity:0;}
+.sigcv{display:block;width:100%;}
+.sig-btns{display:flex;gap:8px;}
+.btn-sc{flex:1;padding:10px;border-radius:var(--r2);border:1.5px solid var(--bord);
+  background:transparent;color:var(--sub);font-size:13px;font-family:inherit;cursor:pointer;}
+.btn-so{flex:2;padding:10px;border-radius:var(--r2);border:1.5px solid var(--gn);
+  background:var(--gn-bg);color:var(--gn2);
+  font-size:13px;font-family:inherit;font-weight:600;cursor:pointer;}
+
+/* ══════ 通知彈窗 ══════ */
+.notif-bg{position:fixed;inset:0;background:rgba(44,36,22,.5);z-index:900;
+  display:none;align-items:center;justify-content:center;
+  padding:20px;backdrop-filter:blur(4px);}
+.notif-bg.open{display:flex;}
+.notif-box{background:var(--card);border-radius:18px;width:100%;max-width:400px;
+  border:1px solid var(--bord);overflow:hidden;
+  box-shadow:0 16px 48px rgba(44,36,22,.2);animation:fadeIn .3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:none}}
+.notif-hd{background:linear-gradient(135deg,var(--gn),var(--gn2));
+  padding:18px 20px;display:flex;align-items:center;gap:12px;}
+.notif-hd-ico{font-size:24px;}
+.notif-hd-title{font-family:'Noto Serif TC',serif;font-size:16px;font-weight:700;color:#fff;}
+.notif-hd-date{font-size:11px;color:rgba(255,255,255,.75);margin-top:2px;}
+.notif-body{padding:16px 18px;max-height:50vh;overflow-y:auto;}
+.notif-item{display:flex;align-items:flex-start;gap:12px;
+  padding:11px 0;border-bottom:1px solid var(--bord);}
+.notif-item:last-child{border-bottom:none;}
+.notif-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.notif-dot.gn{background:var(--gn);}
+.notif-dot.br{background:var(--br);}
+.notif-dot.rd{background:var(--rd);}
+.notif-item-txt{font-size:13px;line-height:1.6;color:var(--ink);}
+.notif-item-sub{font-size:11px;color:var(--sub);margin-top:3px;}
+.notif-footer{padding:14px 18px;border-top:1px solid var(--bord);display:flex;gap:10px;}
+.btn-notif-close{flex:1;padding:11px;border-radius:10px;
+  border:1.5px solid var(--bord);background:transparent;color:var(--sub);
+  font-size:13px;font-family:inherit;cursor:pointer;}
+.btn-notif-ok{flex:2;padding:11px;border-radius:10px;border:none;
+  background:linear-gradient(135deg,var(--gn),var(--gn2));color:#fff;
+  font-size:13px;font-family:inherit;font-weight:600;cursor:pointer;}
+
+/* ══════ EXEC ══════ */
+.exec-hero{background:linear-gradient(135deg,var(--gn-bg),#e8f0e0);
+  border-radius:var(--r);padding:20px;margin-bottom:16px;
+  border:1px solid var(--gn-lt);text-align:center;}
+.exec-hero-sub{font-size:11px;color:var(--sub);letter-spacing:2px;margin-bottom:4px;}
+.exec-hero-title{font-family:'Noto Serif TC',serif;font-size:19px;font-weight:700;
+  color:var(--ink);margin-bottom:10px;}
+
+/* ══════ DEPT ══════ */
+.recv-hero{background:linear-gradient(135deg,var(--gn-bg),var(--sl-bg));
+  border-radius:var(--r);padding:18px;margin-bottom:14px;border:1px solid var(--gn-lt);}
+.rh-hosp{font-size:11px;color:var(--sub);letter-spacing:2px;margin-bottom:3px;}
+.rh-title{font-family:'Noto Serif TC',serif;font-size:19px;font-weight:700;margin-bottom:10px;}
+.rh-meta{display:flex;gap:8px;flex-wrap:wrap;}
+.rh-chip{background:rgba(74,124,89,.12);border:1px solid var(--gn-lt);
+  color:var(--gn2);font-size:11px;padding:4px 12px;border-radius:18px;font-weight:600;}
+.to-card{background:var(--card);border-radius:var(--r);padding:13px 16px;
+  margin-bottom:14px;display:flex;align-items:center;gap:13px;
+  border-left:4px solid var(--gn2);border:1px solid var(--bord);border-left-width:4px;}
+.to-icon{font-size:26px;}
+.to-lbl{font-size:11px;color:var(--sub);margin-bottom:2px;}
+.to-name{font-size:17px;font-weight:700;}
+
+/* ══════ 歸檔相關 ══════ */
+.arch-banner{
+  background:var(--bg2);border:1px solid var(--bord2);
+  border-radius:var(--r2);padding:13px 15px;margin-bottom:8px;
+  font-size:13px;color:var(--sub);text-align:center;
+}
+.arch-banner b{color:var(--ink);}
+
+/* ══════ 成功卡片 ══════ */
+.succ{background:var(--gn-bg);border:1.5px solid var(--gn-lt);
+  border-radius:var(--r);padding:28px 20px;text-align:center;
+  display:none;margin-bottom:14px;}
+.succ.on{display:block;animation:fadeIn .35s ease;}
+.succ-ico{font-size:54px;margin-bottom:10px;}
+.succ-title{font-family:'Noto Serif TC',serif;font-size:19px;font-weight:700;
+  color:var(--gn2);margin-bottom:5px;}
+.succ-sub{font-size:12px;color:var(--sub);line-height:1.7;}
+
+/* notice */
+.notice{border-radius:10px;padding:13px 15px;font-size:13px;line-height:1.7;margin-bottom:12px;}
+.notice.br{background:var(--br-bg);border:1px solid var(--br-lt);color:var(--br2);}
+.notice b{font-weight:700;}
+
+/* empty */
+.empty{text-align:center;padding:48px 20px;color:var(--dim);}
+.empty-ico{font-size:40px;margin-bottom:10px;opacity:.5;}
+.empty-txt{font-size:13px;line-height:1.8;}
+
+/* loading */
+#loading-mask{position:fixed;inset:0;background:rgba(245,240,232,.8);
+  z-index:9999;display:none;align-items:center;justify-content:center;
+  flex-direction:column;gap:14px;}
+.spin{width:38px;height:38px;border:3px solid var(--bord2);
+  border-top-color:var(--gn2);border-radius:50%;
+  animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* toast */
+.toast{position:fixed;bottom:84px;left:50%;
+  transform:translateX(-50%) translateY(14px);
+  background:var(--ink);color:#fff;
+  padding:11px 20px;border-radius:28px;font-size:13px;
+  opacity:0;transition:all .28s;z-index:9998;
+  white-space:nowrap;box-shadow:0 6px 20px rgba(44,36,22,.25);}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* 設定頁 */
+.setting-group{background:var(--card);border-radius:var(--r);
+  border:1px solid var(--bord);padding:16px 18px;margin-bottom:14px;}
+.setting-title{font-size:14px;font-weight:700;color:var(--gn2);
+  margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--bord);}
+.api-hint{background:var(--sl-bg);border:1px solid var(--sl-lt);
+  border-radius:10px;padding:13px 15px;font-size:12px;color:var(--sl2);
+  line-height:1.8;margin-bottom:13px;}
+.pw-lbl{font-size:11px;color:var(--sub);font-weight:700;
+  letter-spacing:.5px;text-transform:uppercase;margin-bottom:5px;display:block;}
+.pw-row{display:flex;gap:8px;margin-bottom:12px;}
+.pw-row input{flex:1;padding:10px 12px;background:var(--bg2);
+  border:1.5px solid var(--bord);border-radius:var(--r2);
+  color:var(--ink);font-size:13px;font-family:inherit;outline:none;}
+.pw-row input:focus{border-color:var(--gn);}
+.btn-sub{width:100%;padding:13px;border-radius:10px;border:none;
+  font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;margin-top:4px;}
+.btn-sub.gn{background:var(--gn-bg);color:var(--gn2);border:1.5px solid var(--gn);}
+.btn-sub.br{background:var(--br-bg);color:var(--br2);border:1.5px solid var(--br);}
+
+/* 列印 */
+.print-preview-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--bord);}
+@media print{
+  body>*:not(#print-doc){display:none !important;}
+  #print-doc{display:block !important;position:fixed;inset:0;background:#fff;padding:12mm 15mm;z-index:99999;}
+  @page{margin:0;size:A4 portrait;}
+}
+#print-doc{display:none;font-family:'Noto Sans TC',sans-serif;color:#1a1a1a;}
+.pt-title{font-family:'Noto Serif TC',serif;font-size:18px;font-weight:700;text-align:center;margin-bottom:4px;}
+.pt-sub{font-size:11px;color:#666;text-align:center;margin-bottom:14px;}
+.pt-table{width:100%;border-collapse:collapse;font-size:10px;}
+.pt-table th{background:#2d5a3d;color:#fff;padding:7px 8px;text-align:left;font-size:10px;font-weight:600;}
+.pt-table td{padding:7px 8px;border-bottom:1px solid #e0e0e0;vertical-align:top;}
+.pt-table tr:nth-child(even) td{background:#f8f8f8;}
+.pt-footer{margin-top:14px;font-size:10px;color:#999;text-align:center;}
+.pt-sig-area{margin-top:18px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+.pt-sig-box{border:1px solid #ccc;border-radius:6px;padding:10px;min-height:58px;}
+.pt-sig-role{font-size:10px;font-weight:700;color:#2d5a3d;margin-bottom:4px;}
+.pt-sig-line{border-bottom:1px solid #ccc;margin-top:30px;}
+</style>
+</head>
+<body>
+
+<!-- ══ 登入 ══ -->
+<div class="page on" id="p-login">
+  <div class="lg-wrap">
+    <div class="lg-logo">
+      <div class="lg-ico">📋</div>
+      <div class="lg-hosp">賢 德 醫 院</div>
+      <div class="lg-title">公文管理系統</div>
+    </div>
+    <div class="lg-card">
+      <span class="lbl">選擇身份</span>
+      <div class="role-grid">
+        <button class="rbtn sel" id="r-hr"   onclick="setRole('hr')"><span class="ri">🏢</span>人事室<br><small style="font-size:10px;opacity:.7">登記・發文</small></button>
+        <button class="rbtn"    id="r-exec" onclick="setRole('exec')"><span class="ri">✍️</span>執行董事<br><small style="font-size:10px;opacity:.7">核示・分配</small></button>
+        <button class="rbtn"    id="r-dept" onclick="setRole('dept')"><span class="ri">🏥</span>各單位<br><small style="font-size:10px;opacity:.7">收件・簽收</small></button>
+      </div>
+      <div id="dept-pick" style="display:none">
+        <span class="lbl">所屬單位</span>
+        <select class="inp inp-sel" id="ln-dept">
+          <option value="">請選擇單位…</option>
+          <option>行政部</option><option>護理部</option><option>醫務部</option>
+          <option>財務部</option><option>藥劑部</option><option>檢驗科</option>
+          <option>放射科</option><option>社工室</option>
+        </select>
+      </div>
+      <span class="lbl">密碼</span>
+      <input class="inp" type="password" id="ln-pw" placeholder="請輸入密碼" onkeydown="if(event.key==='Enter')doLogin()">
+      <button class="btn-main" onclick="doLogin()">登　入</button>
+      <div class="lg-hint">預設密碼：人事室 <b>hr123</b>　執行董事 <b>exec123</b>　各單位 <b>dept123</b></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 人事室 ══ -->
+<div class="page" id="p-hr">
+  <div class="topbar">
+    <div class="tb-left">
+      <button class="btn-back" onclick="goBack('p-hr')">‹</button>
+      <div class="tb-title">📋 人事室</div>
+    </div>
+    <div class="tb-right">
+      <span class="chip chip-br" id="hr-badge">待核示 0</span>
+      <button class="icobtn" onclick="showPage('p-settings')">⚙️</button>
+    </div>
+  </div>
+  <div class="scroll-body">
+    <div class="page-body">
+      <div class="stats" style="margin-top:4px">
+        <div class="stat"><div class="snum" id="st0" style="color:var(--sl2)">0</div><div class="slbl">今日</div></div>
+        <div class="stat"><div class="snum" id="st1" style="color:var(--purple)">0</div><div class="slbl">待核示</div></div>
+        <div class="stat"><div class="snum" id="st2" style="color:var(--amber)">0</div><div class="slbl">待簽收</div></div>
+        <div class="stat"><div class="snum" id="st3" style="color:var(--green)">0</div><div class="slbl">完成</div></div>
+      </div>
+      <div class="tab-row">
+        <button class="fbtn on" id="hrtab-docs"  onclick="hrTab('docs',this)">📋 公文列表</button>
+        <button class="fbtn"    id="hrtab-track" onclick="hrTab('track',this)">📊 追蹤清單</button>
+        <button class="fbtn"    id="hrtab-add"   onclick="hrTab('add',this)">＋ 登記公文</button>
+        <button class="fbtn"    id="hrtab-arch"  onclick="hrTab('arch',this)">🗄️ 已歸檔</button>
+        <button class="fbtn"    id="hrtab-print" onclick="hrTab('print',this)">🖨️ 列印</button>
+      </div>
+
+      <!-- 公文列表 -->
+      <div id="hr-docs-panel">
+        <div class="search-wrap">
+          <span class="search-ico">🔍</span>
+          <input type="text" id="hr-search" placeholder="搜尋公文號、機關、主旨…" oninput="run(async()=>await renderHR())">
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+          <label style="display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer;color:var(--sub)">
+            <input type="checkbox" id="check-all" onchange="toggleCheckAll(this)" style="width:16px;height:16px;accent-color:var(--gn2)">
+            全選
+          </label>
+          <div style="display:flex;gap:7px">
+            <span id="checked-count" style="font-size:12px;color:var(--sub);align-self:center">已選 0 筆</span>
+            <button class="btn-f sl" onclick="printChecked()" style="font-size:12px;padding:7px 14px">🖨️ 列印勾選清單</button>
+          </div>
+        </div>
+        <div id="hr-list"></div>
+        <div id="hr-empty" class="empty"><div class="empty-ico">📭</div><div class="empty-txt">尚無公文<br>請切換到「登記公文」新增</div></div>
+      </div>
+
+      <!-- 追蹤清單 -->
+      <div id="hr-track-panel" style="display:none">
+        <div class="tab-row">
+          <button class="fbtn on" id="tf-all"  onclick="setTrackFilter('all',this)">全部</button>
+          <button class="fbtn"    id="tf-pend" onclick="setTrackFilter('待核示',this)">待核示</button>
+          <button class="fbtn"    id="tf-recv" onclick="setTrackFilter('待簽收',this)">待簽收</button>
+          <button class="fbtn"    id="tf-done" onclick="setTrackFilter('完成',this)">完成</button>
+        </div>
+        <div class="track-hdr"><div>公文號</div><div>主旨 / 機關</div><div>階段</div><div>緊急</div></div>
+        <div id="track-rows"></div>
+        <div id="track-empty" class="empty" style="display:none;padding:24px">
+          <div class="empty-ico" style="font-size:28px">🔍</div>
+          <div class="empty-txt">此篩選條件無公文</div>
+        </div>
+      </div>
+
+      <!-- 登記公文 -->
+      <div id="hr-add-panel" style="display:none">
+        <div class="fwrap">
+          <div class="ftitle">＋ 登記新公文</div>
+          <div class="fgrid">
+            <div class="fg"><label>收文日期</label><input type="date" id="fd"></div>
+            <div class="fg"><label>來文類型</label>
+              <select id="ft"><option>電子公文</option><option>紙本公文</option><option>Mail信件</option></select></div>
+            <div class="fg"><label>來文字號</label><input type="text" id="fno" placeholder="人字第114…"></div>
+            <div class="fg"><label>來文機關</label>
+              <input type="text" id="forg" list="org-list" placeholder="輸入或選擇常用機關" autocomplete="off">
+              <datalist id="org-list">
+                <option value="衛生局"><option value="健保署"><option value="勞動部">
+                <option value="勞工局"><option value="勞保局"><option value="護理師公會">
+                <option value="衛生福利部"><option value="人事行政總處"><option value="行政院">
+              </datalist></div>
+            <div class="fg ff"><label>主旨摘要</label><textarea id="fsub" placeholder="請簡述公文主旨內容…"></textarea></div>
+            <div class="fg"><label>緊急程度</label>
+              <select id="furg"><option>普通</option><option>重要</option><option>急件</option><option>最速件</option></select></div>
+            <div class="fg"><label>備註</label><input type="text" id="fnote" placeholder="截止日期等…"></div>
+            <div class="fg ff">
+              <label>保存年限</label>
+              <div class="retention-opts" id="retention-opts">
+                <label class="ropt sel"><input type="radio" name="retention" value="3" checked onchange="updateRoptStyle()">
+                  <div><div class="ropt-main">保存 3 年</div><div class="ropt-sub">如：平常收發、法令周知、會議通知（每日大宗公文）</div></div></label>
+                <label class="ropt"><input type="radio" name="retention" value="5" onchange="updateRoptStyle()">
+                  <div><div class="ropt-main">保存 5 年</div><div class="ropt-sub">如：一般採購、財產報廢</div></div></label>
+                <label class="ropt"><input type="radio" name="retention" value="10" onchange="updateRoptStyle()">
+                  <div><div class="ropt-main">保存 10 年</div><div class="ropt-sub">如：員工勞保、重要經費核銷</div></div></label>
+                <label class="ropt"><input type="radio" name="retention" value="15" onchange="updateRoptStyle()">
+                  <div><div class="ropt-main">保存 15 年</div><div class="ropt-sub">如：醫院評鑑、重要行政</div></div></label>
+                <label class="ropt"><input type="radio" name="retention" value="0" onchange="updateRoptStyle()">
+                  <div><div class="ropt-main">永久保存</div><div class="ropt-sub">如：設立許可、醫療糾紛處理</div></div></label>
+              </div>
+            </div>
+          </div>
+          <div class="file-area" style="margin-top:12px">
+            <div class="file-area-title">📎 公文附件連結（可登記後再補）</div>
+            <div class="file-area-hint">手機拍照 → 上傳 Google Drive → 複製分享連結 → 貼到下方</div>
+            <input type="text" id="ffile" placeholder="貼上 Google Drive 分享連結…">
+          </div>
+          <button class="btn-full" onclick="addDoc()" style="margin-top:14px">登記並通知執行董事</button>
+        </div>
+      </div>
+
+      <!-- 已歸檔 -->
+      <div id="hr-arch-panel" style="display:none">
+        <div class="search-wrap">
+          <span class="search-ico">🔍</span>
+          <input type="text" id="arch-search" placeholder="搜尋已歸檔公文…" oninput="renderArch()">
+        </div>
+        <div class="tab-row" id="arch-year-tabs"></div>
+        <div class="tab-row">
+          <button class="fbtn on" id="af-all" onclick="setArchFilter('all',this)">全部年限</button>
+          <button class="fbtn" onclick="setArchFilter('3',this)">3年</button>
+          <button class="fbtn" onclick="setArchFilter('5',this)">5年</button>
+          <button class="fbtn" onclick="setArchFilter('10',this)">10年</button>
+          <button class="fbtn" onclick="setArchFilter('15',this)">15年</button>
+          <button class="fbtn" onclick="setArchFilter('0',this)">永久</button>
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin-bottom:10px">
+          <button class="btn-f sl" onclick="exportArchExcel()" style="font-size:12px;padding:8px 14px">📥 匯出 Excel 清單</button>
+        </div>
+        <div id="arch-list"></div>
+        <div id="arch-empty" class="empty" style="display:none">
+          <div class="empty-ico">🗄️</div><div class="empty-txt">尚無歸檔公文</div>
+        </div>
+      </div>
+
+      <!-- 列印 -->
+      <div id="hr-print-panel" style="display:none">
+        <div class="fwrap">
+          <div class="ftitle">🖨️ 列印公文清單</div>
+          <div class="fgrid">
+            <div class="fg">
+              <label>日期選擇</label>
+              <select id="print-date-mode" class="inp-sel" onchange="onPrintModeChange()"
+                style="width:100%;padding:11px 13px;background:var(--bg2);border:1.5px solid var(--bord);border-radius:var(--r2);color:var(--ink);font-size:14px;font-family:inherit;outline:none">
+                <option value="today">今日</option>
+                <option value="pick">指定日期</option>
+                <option value="range">日期區間</option>
+              </select>
+            </div>
+            <div class="fg" id="print-single-wrap" style="display:none">
+              <label>指定日期</label>
+              <input type="date" id="print-date-single" style="width:100%;padding:11px 13px;background:var(--bg2);border:1.5px solid var(--bord);border-radius:var(--r2);color:var(--ink);font-size:14px;font-family:inherit;outline:none">
+            </div>
+            <div class="fg ff" id="print-range-wrap" style="display:none">
+              <label>日期區間</label>
+              <div style="display:flex;gap:8px;align-items:center">
+                <input type="date" id="print-date-from" style="flex:1;padding:11px 13px;background:var(--bg2);border:1.5px solid var(--bord);border-radius:var(--r2);color:var(--ink);font-size:14px;font-family:inherit;outline:none">
+                <span style="color:var(--sub);font-size:13px">至</span>
+                <input type="date" id="print-date-to" style="flex:1;padding:11px 13px;background:var(--bg2);border:1.5px solid var(--bord);border-radius:var(--r2);color:var(--ink);font-size:14px;font-family:inherit;outline:none">
+              </div>
+            </div>
+            <div class="fg ff">
+              <label>篩選階段</label>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px">
+                <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer">
+                  <input type="checkbox" id="pf-all" checked onchange="toggleAllStages(this)" style="accent-color:var(--gn2);width:16px;height:16px"> 全部</label>
+                <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer">
+                  <input type="checkbox" id="pf-pend" checked style="accent-color:var(--gn2);width:16px;height:16px"> 待核示</label>
+                <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer">
+                  <input type="checkbox" id="pf-recv" checked style="accent-color:var(--gn2);width:16px;height:16px"> 待簽收</label>
+                <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer">
+                  <input type="checkbox" id="pf-done" checked style="accent-color:var(--gn2);width:16px;height:16px"> 完成</label>
+              </div>
+            </div>
+          </div>
+          <button class="btn-full" onclick="previewPrint()" style="margin-top:14px">預覽清單</button>
+        </div>
+        <div id="print-preview" style="display:none">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <div class="sec" style="margin:0" id="print-preview-title">預覽</div>
+            <button onclick="doPrint()" style="padding:9px 18px;border-radius:9px;border:none;
+              background:linear-gradient(135deg,var(--gn),var(--gn2));color:#fff;
+              font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">🖨️ 列印</button>
+          </div>
+          <div class="print-preview-wrap" id="print-table-wrap"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bnav">
+    <button class="nb on" id="hrnb-docs"  onclick="hrTab('docs', document.getElementById('hrtab-docs'))"><span class="nb-ico">📋</span><span class="nb-lbl">公文</span></button>
+    <button class="nb"    id="hrnb-track" onclick="hrTab('track',document.getElementById('hrtab-track'))">
+      <span class="nb-ico" style="position:relative">📊<span class="nb-dot" id="hr-ntfy-dot" style="display:none"></span></span>
+      <span class="nb-lbl">追蹤</span></button>
+    <button class="nb" id="hrnb-add"   onclick="hrTab('add',  document.getElementById('hrtab-add'))"><span class="nb-ico">➕</span><span class="nb-lbl">登記</span></button>
+    <button class="nb" id="hrnb-arch"  onclick="hrTab('arch', document.getElementById('hrtab-arch'))"><span class="nb-ico">🗄️</span><span class="nb-lbl">歸檔</span></button>
+    <button class="nb" id="hrnb-print" onclick="hrTab('print',document.getElementById('hrtab-print'))"><span class="nb-ico">🖨️</span><span class="nb-lbl">列印</span></button>
+  </div>
+</div>
+
+<!-- ══ 執行董事 ══ -->
+<div class="page" id="p-exec">
+  <div class="topbar">
+    <div class="tb-left">
+      <button class="btn-back" onclick="goBack('p-exec')">‹</button>
+      <div class="tb-title">✍️ 執行董事</div>
+    </div>
+    <div class="tb-right"><span class="chip chip-br" id="ex-badge">待核示 0</span></div>
+  </div>
+  <div class="scroll-body">
+    <div class="page-body">
+      <div class="exec-hero">
+        <div class="exec-hero-sub">賢德醫院　人事室公文系統</div>
+        <div class="exec-hero-title">公文核示區</div>
+        <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap">
+          <span class="rh-chip" id="ex-date">—</span>
+          <span class="rh-chip" id="ex-cnt">待核示 0 件</span>
+        </div>
+      </div>
+      <div class="notice br">⚠️ <b>請依序核示每份公文</b>，完成勾選分配單位並手寫簽名後，系統將自動通知各單位收件。</div>
+      <div id="ex-list"></div>
+      <div id="ex-empty" class="empty" style="display:none">
+        <div class="empty-ico">✅</div><div class="empty-txt">所有公文均已核示完成</div>
+      </div>
+    </div>
+  </div>
+  <div class="bnav">
+    <button class="nb on" onclick="exTab('pending',this)"><span class="nb-ico">⏳</span><span class="nb-lbl">待核示</span></button>
+    <button class="nb"    onclick="exTab('done',this)"><span class="nb-ico">✅</span><span class="nb-lbl">已核示</span></button>
+  </div>
+</div>
+
+<!-- ══ 各單位 ══ -->
+<div class="page" id="p-dept">
+  <div class="topbar">
+    <div class="tb-left">
+      <button class="btn-back" onclick="goBack('p-dept')">‹</button>
+      <div class="tb-title" id="dept-tb">🏥 單位收件</div>
+    </div>
+    <div class="tb-right"><span class="chip chip-br" id="dept-badge">待簽收 0</span></div>
+  </div>
+  <div class="scroll-body">
+    <div class="page-body">
+      <!-- 收件匣內容 -->
+      <div id="dept-inbox-content">
+        <div class="recv-hero">
+          <div class="rh-hosp">賢德醫院　人事室公文系統</div>
+          <div class="rh-title">公文收件通知</div>
+          <div class="rh-meta">
+            <span class="rh-chip" id="dept-date-chip">—</span>
+            <span class="rh-chip" id="dept-cnt-chip">共 0 件</span>
+          </div>
+        </div>
+        <div class="to-card">
+          <div class="to-icon">🏥</div>
+          <div><div class="to-lbl">收件單位</div><div class="to-name" id="dept-unit-name">—</div></div>
+        </div>
+        <div class="sec">待簽收公文</div>
+        <div id="dept-list"></div>
+        <div id="dept-empty" class="empty" style="display:none">
+          <div class="empty-ico">✅</div><div class="empty-txt">所有公文均已簽收</div>
+        </div>
+        <div id="dept-sigarea">
+          <div class="sec">收件確認簽名</div>
+          <div class="fwrap">
+            <div class="ftitle">✍️ 手寫簽名確認收件</div>
+            <div class="sigwrap"><canvas class="sigcv" id="dept-cv" height="120"></canvas>
+              <div class="sighint" id="dept-hint">請在此處手寫簽名</div></div>
+            <div class="sig-btns" style="margin-bottom:10px">
+              <button class="btn-sc" onclick="deptClear()">清除</button>
+              <button class="btn-so" onclick="deptConfirmSig()">確認簽名</button>
+            </div>
+            <button class="btn-full" id="dept-submit" disabled onclick="deptSubmit()">確認收件</button>
+          </div>
+        </div>
+        <div class="succ" id="dept-succ">
+          <div class="succ-ico">✅</div>
+          <div class="succ-title">已確認收件</div>
+          <div class="succ-sub" id="dept-succ-sub">系統已記錄</div>
+        </div>
+        <div id="dept-handler-area" style="display:none">
+          <div class="sec">填寫承辦人員</div>
+          <div class="fwrap">
+            <div class="ftitle">📝 後續承辦資訊</div>
+            <div class="fgrid">
+              <div class="fg ff"><label>承辦人員姓名</label>
+                <input type="text" id="dept-handler-name" placeholder="負責人員姓名"></div>
+              <div class="fg ff"><label>處理說明</label>
+                <textarea id="dept-handler-note" placeholder="預計處理方式、日期…"></textarea></div>
+            </div>
+            <button class="btn-full" onclick="submitHandler()">儲存承辦資訊</button>
+          </div>
+        </div>
+      </div>
+      <!-- 歷史紀錄 -->
+      <div id="dept-history-content" style="display:none">
+        <div class="search-wrap">
+          <span class="search-ico">🔍</span>
+          <input type="text" id="hist-search" placeholder="搜尋公文號、機關、主旨…" oninput="renderHistory()">
+        </div>
+        <div class="tab-row">
+          <button class="fbtn on" id="hf-all"  onclick="setHistFilter('all',this)">全部</button>
+          <button class="fbtn"    id="hf-done" onclick="setHistFilter('done',this)">已簽收</button>
+          <button class="fbtn"    id="hf-wait" onclick="setHistFilter('wait',this)">待簽收</button>
+        </div>
+        <div id="hist-list"></div>
+        <div id="hist-empty" class="empty" style="display:none">
+          <div class="empty-ico">🔍</div><div class="empty-txt">查無符合的公文</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bnav">
+    <button class="nb on" id="dnb-inbox"   onclick="deptTab('inbox',this)"><span class="nb-ico">📥</span><span class="nb-lbl">收件匣</span></button>
+    <button class="nb"    id="dnb-history" onclick="deptTab('history',this)"><span class="nb-ico">🗂</span><span class="nb-lbl">歷史紀錄</span></button>
+  </div>
+</div>
+
+<!-- ══ 設定 ══ -->
+<div class="page" id="p-settings">
+  <div class="topbar">
+    <div class="tb-left">
+      <button class="btn-back" onclick="goBack('p-settings')">‹</button>
+      <div class="tb-title">⚙️ 系統設定</div>
+    </div>
+  </div>
+  <div class="scroll-body">
+    <div class="page-body">
+      <div class="setting-group">
+        <div class="setting-title">🔗 Google Sheets 串接</div>
+        <div class="api-hint"><b>設定後所有手機即時同步</b><br>1. 開啟 Google Apps Script，貼上後端程式碼<br>2. 部署為網頁應用程式（存取：所有人）<br>3. 複製網址貼到下方</div>
+        <span class="pw-lbl">Apps Script 網址</span>
+        <input class="inp" type="text" id="api-url-input" placeholder="https://script.google.com/macros/s/…/exec" style="margin-bottom:8px">
+        <div id="api-status" style="font-size:12px;color:var(--sub);margin-bottom:8px"></div>
+        <button class="btn-sub gn" onclick="saveApiUrl()">儲存並測試連線</button>
+      </div>
+      <div class="setting-group">
+        <div class="setting-title">🔑 密碼管理（人事室專用）</div>
+        <div class="pw-lbl">人事室密碼</div>
+        <div class="pw-row">
+          <input type="password" id="pw-hr-old" placeholder="目前密碼">
+          <input type="password" id="pw-hr-new" placeholder="新密碼">
+        </div>
+        <div class="pw-lbl">執行董事密碼</div>
+        <div class="pw-row">
+          <input type="password" id="pw-ex-old" placeholder="目前密碼">
+          <input type="password" id="pw-ex-new" placeholder="新密碼">
+        </div>
+        <div class="pw-lbl">各單位密碼</div>
+        <div class="pw-row">
+          <input type="password" id="pw-dept-old" placeholder="目前密碼">
+          <input type="password" id="pw-dept-new" placeholder="新密碼">
+        </div>
+        <button class="btn-sub br" onclick="savePasswords()" style="margin-top:4px">更新密碼</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SHEETS ══ -->
+<div class="shbg" id="ex-sheet"     onclick="closeSheet('ex-sheet',event)"><div class="sh"><div class="sh-handle"></div><div class="sh-title" id="ex-sh-title">公文核示</div><div id="ex-sh-body"></div><button class="sh-close" onclick="closeSheet('ex-sheet')">取消</button></div></div>
+<div class="shbg" id="notify-sheet" onclick="closeSheet('notify-sheet',event)"><div class="sh"><div class="sh-handle"></div><div class="sh-title" id="ns-title">傳送收件通知</div><div id="ns-body"></div><button class="sh-close" onclick="closeSheet('notify-sheet')">關閉</button></div></div>
+<div class="shbg" id="edit-sheet"   onclick="closeSheet('edit-sheet',event)">
+  <div class="sh" style="max-height:92vh">
+    <div class="sh-handle"></div>
+    <div class="sh-title">✏️ 編輯公文</div>
+    <input type="hidden" id="edit-doc-id">
+    <div class="fgrid" style="gap:10px;margin-bottom:10px">
+      <div class="fg"><label class="lbl" style="margin-top:0">來文機關</label>
+        <input class="inp" style="margin-bottom:0" id="edit-org" list="org-list2" placeholder="機關名稱">
+        <datalist id="org-list2"><option value="衛生局"><option value="健保署"><option value="勞動部"><option value="勞工局"><option value="勞保局"><option value="護理師公會"><option value="衛生福利部"></datalist></div>
+      <div class="fg"><label class="lbl" style="margin-top:0">來文字號</label>
+        <input class="inp" style="margin-bottom:0" id="edit-no" placeholder="人字第114…"></div>
+      <div class="fg ff"><label class="lbl" style="margin-top:0">主旨摘要</label>
+        <textarea class="inp" style="margin-bottom:0;height:60px;resize:none" id="edit-subject" placeholder="公文主旨…"></textarea></div>
+      <div class="fg"><label class="lbl" style="margin-top:0">緊急程度</label>
+        <select class="inp inp-sel" style="margin-bottom:0" id="edit-urg">
+          <option>普通</option><option>重要</option><option>急件</option><option>最速件</option></select></div>
+      <div class="fg"><label class="lbl" style="margin-top:0">備註</label>
+        <input class="inp" style="margin-bottom:0" id="edit-note" placeholder="截止日期等…"></div>
+    </div>
+    <div class="file-area" style="margin-bottom:12px">
+      <div class="file-area-title">📎 公文附件連結</div>
+      <div class="file-area-hint">手機拍照 → Google Drive → 複製連結 → 貼到下方</div>
+      <input type="text" id="edit-file" placeholder="貼上 Google Drive 分享連結…">
+    </div>
+    <button class="btn-full" onclick="saveEdit()">儲存修改</button>
+    <button class="sh-close" onclick="closeSheet('edit-sheet')">取消</button>
+  </div>
+</div>
+
+<!-- 歸檔確認 sheet -->
+<div class="shbg" id="arch-sheet" onclick="closeSheet('arch-sheet',event)">
+  <div class="sh">
+    <div class="sh-handle"></div>
+    <div class="sh-title">🗄️ 確認歸檔</div>
+    <input type="hidden" id="arch-doc-id">
+    <div id="arch-doc-info" style="background:var(--bg2);border-radius:10px;padding:14px;margin-bottom:16px;font-size:13px;line-height:1.8;color:var(--ink)"></div>
+    <div style="margin-bottom:16px">
+      <div class="lbl">確認保存年限</div>
+      <div id="arch-retention-display" style="padding:12px 14px;background:var(--gn-bg);border:1px solid var(--gn-lt);border-radius:var(--r2);font-size:14px;font-weight:600;color:var(--gn2)"></div>
+      <div id="arch-expire-display" style="margin-top:6px;font-size:12px;color:var(--sub)"></div>
+    </div>
+    <div class="notice br" style="font-size:12px">
+      📌 歸檔後此公文將從主清單移除。<br>如需查閱請至「已歸檔」區，或下載 Excel 清單後至 Google Drive 取得掃描檔。
+    </div>
+    <button class="btn-full" onclick="confirmArchive()">確認歸檔</button>
+    <button class="sh-close" onclick="closeSheet('arch-sheet')">取消</button>
+  </div>
+</div>
+
+<!-- 通知彈窗 -->
+<div class="notif-bg" id="notif-bg">
+  <div class="notif-box">
+    <div class="notif-hd">
+      <div class="notif-hd-ico">🔔</div>
+      <div><div class="notif-hd-title">待處理事項提醒</div>
+        <div class="notif-hd-date" id="notif-date"></div></div>
+    </div>
+    <div class="notif-body" id="notif-body"></div>
+    <div class="notif-footer">
+      <button class="btn-notif-close" onclick="closeNotif()">稍後處理</button>
+      <button class="btn-notif-ok"    onclick="closeNotif()">我知道了</button>
+    </div>
+  </div>
+</div>
+
+<!-- 列印用隱藏區塊 -->
+<div id="print-doc">
+  <!-- 送簽清單樣式 -->
+  <div id="print-sign-list" style="display:none">
+    <div style="text-align:center;margin-bottom:18px">
+      <div style="font-family:'Noto Serif TC',serif;font-size:18px;font-weight:700;letter-spacing:2px">公　文　送　簽　清　單</div>
+      <div style="font-size:12px;color:#666;margin-top:5px" id="psub-meta"></div>
+    </div>
+    <table style="width:100%;border-collapse:collapse;font-size:11px">
+      <thead>
+        <tr style="background:#2d5a3d;color:#fff">
+          <th style="padding:8px;text-align:center;width:28px">編</th>
+          <th style="padding:8px;text-align:left;width:72px">院內編號</th>
+          <th style="padding:8px;text-align:left;width:60px">登記日期</th>
+          <th style="padding:8px;text-align:left;width:110px">公文字號</th>
+          <th style="padding:8px;text-align:left;width:90px">來文單位</th>
+          <th style="padding:8px;text-align:left">主旨內容</th>
+          <th style="padding:8px;text-align:left;width:45px">緊急</th>
+        </tr>
+      </thead>
+      <tbody id="psign-tbody"></tbody>
+    </table>
+    <div style="margin-top:28px;display:grid;grid-template-columns:1fr 1fr;gap:24px">
+      <div style="border:1px solid #ccc;border-radius:6px;padding:12px 16px;min-height:70px">
+        <div style="font-size:11px;font-weight:700;color:#2d5a3d;margin-bottom:6px;letter-spacing:1px">執　行　董　事</div>
+        <div style="border-bottom:1px solid #ccc;margin-top:40px"></div>
+        <div style="font-size:10px;color:#999;margin-top:4px;text-align:center">簽章</div>
+      </div>
+      <div style="border:1px solid #ccc;border-radius:6px;padding:12px 16px;min-height:70px">
+        <div style="font-size:11px;font-weight:700;color:#2d5a3d;margin-bottom:6px;letter-spacing:1px">院　　　長</div>
+        <div style="border-bottom:1px solid #ccc;margin-top:40px"></div>
+        <div style="font-size:10px;color:#999;margin-top:4px;text-align:center">簽章</div>
+      </div>
+    </div>
+    <div style="margin-top:14px;font-size:10px;color:#aaa;text-align:center" id="psign-footer"></div>
+  </div>
+
+  <!-- 一般清單樣式（列印 tab 用）-->
+  <div id="print-general-list">
+    <div class="pt-title">公文清單</div>
+    <div class="pt-sub" id="pt-sub"></div>
+    <table class="pt-table"><thead><tr>
+      <th style="width:65px">公文號</th><th style="width:55px">日期</th>
+      <th style="width:45px">類型</th><th style="width:100px">機關／字號</th>
+      <th>主旨摘要</th><th style="width:40px">緊急</th>
+      <th style="width:48px">階段</th><th style="width:85px">分發單位</th>
+      <th style="width:55px">保存年限</th><th style="width:55px">備註</th>
+    </tr></thead><tbody id="pt-tbody"></tbody></table>
+    <div class="pt-sig-area">
+      <div class="pt-sig-box"><div class="pt-sig-role">承　辦　人</div><div class="pt-sig-line"></div></div>
+      <div class="pt-sig-box"><div class="pt-sig-role">執 行 董 事</div><div class="pt-sig-line"></div></div>
+      <div class="pt-sig-box"><div class="pt-sig-role">院　　　長</div><div class="pt-sig-line"></div></div>
+    </div>
+    <div class="pt-footer" id="pt-footer"></div>
+  </div>
+</div>
+
+<div id="loading-mask"><div class="spin"></div><div style="font-size:14px;color:var(--sub)">載入中…</div></div>
+<div class="toast" id="toast"></div>
+<script>
+// ═══ CONFIG ═══
+const UNITS=['行政部','護理部','醫務部','財務部','藥劑部','檢驗科','放射科','社工室'];
+const RETENTION_LABELS={'0':'永久保存','3':'保存 3 年','5':'保存 5 年','10':'保存 10 年','15':'保存 15 年'};
+
+// ═══ API ═══
+let _cache=null;
+function showLoading(){document.getElementById('loading-mask').style.display='flex'}
+function hideLoading(){document.getElementById('loading-mask').style.display='none'}
+async function run(fn){showLoading();try{await fn();}catch(e){toast('❌ '+(e.message||'操作失敗'));}finally{hideLoading();}}
+async function api(action,body={}){
+  const url=localStorage.getItem('docflow_api_url')||'';
+  if(!url) return apiLocal(action,body);
+  // 用 GET + 把資料 encode 進 URL，避免 CORS 問題
+  const payload = encodeURIComponent(JSON.stringify({action,...body}));
+  const res=await fetch(`${url}?action=${action}&payload=${payload}`);
+  const json=await res.json();
+  if(!json.success) throw new Error(json.error||'伺服器錯誤');
+  _cache=null; return json.data;
+}
+async function loadDocs(){
+  const url=localStorage.getItem('docflow_api_url')||'';
+  if(!url) return apiLocal('getDocs',{});
+  if(_cache) return _cache;
+  const docs=await api('getDocs',{});
+  _cache=docs; setTimeout(()=>_cache=null,30000); return docs;
+}
+
+// ═══ LOCAL FALLBACK ═══
+const SK='docflow_v5';
+function localLoad(){try{return JSON.parse(localStorage.getItem(SK)||'[]')}catch(e){return[]}}
+function localSave(d){localStorage.setItem(SK,JSON.stringify(d))}
+if(!localStorage.getItem('dfseed5')){
+  const t=new Date().toISOString().slice(0,10);
+  localSave([
+    {id:'114-0001',date:t,type:'電子公文',no:'人字第1140001號',org:'衛生福利部',subject:'醫事人員執照換發作業說明',urg:'普通',note:'',fileUrl:'',retention:'3',stage:'待核示',units:[],recv:{},handler:{},execSig:null,archived:false},
+    {id:'114-0002',date:t,type:'紙本公文',no:'勞字第1140052號',org:'勞動部',subject:'勞工退休金提繳率調整通知',urg:'重要',note:'',fileUrl:'',retention:'5',stage:'待簽收',units:['護理部','財務部'],recv:{護理部:'done',財務部:'wait'},handler:{護理部:{name:'陳小明',note:'已轉知'},財務部:{}},execSig:'demo',archived:false},
+    {id:'114-0003',date:t,type:'Mail信件',no:'',org:'健保署',subject:'特約醫事機構服務品質督導',urg:'急件',note:'截止 06/10',fileUrl:'',retention:'3',stage:'待簽收',units:['醫務部','護理部'],recv:{醫務部:'wait',護理部:'wait'},handler:{},execSig:'demo',archived:false},
+  ]);
+  localStorage.setItem('dfseed5','1');
+}
+function calcExpire(dateStr,retention){
+  if(retention==='0') return '永久保存';
+  const d=new Date(normDate(dateStr)+'T00:00:00');
+  d.setFullYear(d.getFullYear()+parseInt(retention));
+  const roc=d.getFullYear()-1911;
+  return `${roc}年${d.getMonth()+1}月${d.getDate()}日到期`;
+}
+function apiLocal(action,body){
+  const docs=localLoad();
+  if(action==='getDocs') return docs.filter(d=>!d.archived);
+  if(action==='getArchived') return docs.filter(d=>d.archived);
+  if(action==='addDoc'){
+    const d=new Date(),doc=body.doc;
+    if(!doc.id){const roc=d.getFullYear()-1911;const yd=docs.filter(x=>x.id&&x.id.startsWith(roc+'-'));doc.id=`${roc}-${String(yd.length+1).padStart(4,'0')}`;}
+    doc.stage='待核示';doc.units=[];doc.recv={};doc.handler={};doc.execSig='';doc.archived=false;
+    docs.push(doc);localSave(docs);return doc;
+  }
+  if(action==='execSign'){
+    const{docId,units}=body;const doc=docs.find(d=>d.id===docId);
+    doc.units=units;doc.recv={};doc.handler={};
+    units.forEach(u=>{doc.recv[u]='wait';doc.handler[u]={}});
+    doc.stage='待簽收';doc.execSig='signed';localSave(docs);return{ok:true};
+  }
+  if(action==='deptRecv'){
+    const{docId,unit}=body;const doc=docs.find(d=>d.id===docId);
+    doc.recv[unit]='done';
+    if(doc.units.every(u=>doc.recv[u]==='done')) doc.stage='完成';
+    localSave(docs);return{ok:true};
+  }
+  if(action==='setHandler'){
+    const{docId,unit,name,note}=body;const doc=docs.find(d=>d.id===docId);
+    if(!doc.handler)doc.handler={};
+    doc.handler[unit]={name,note,time:new Date().toISOString()};
+    localSave(docs);return{ok:true};
+  }
+  if(action==='updateDoc'){
+    const{docId,fields}=body;const doc=docs.find(d=>d.id===docId);
+    if(doc)Object.assign(doc,fields);localSave(docs);return{ok:true};
+  }
+  if(action==='deleteDoc'){
+    const{docId}=body;
+    const idx=docs.findIndex(d=>d.id===docId);
+    if(idx>-1) docs.splice(idx,1);
+    localSave(docs);return{ok:true};
+  }
+  if(action==='archiveDoc'){
+    const{docId}=body;const doc=docs.find(d=>d.id===docId);
+    if(doc){doc.archived=true;doc.archivedAt=new Date().toISOString();}
+    localSave(docs);return{ok:true};
+  }
+  if(action==='restoreDoc'){
+    const{docId}=body;const doc=docs.find(d=>d.id===docId);
+    if(doc){doc.archived=false;doc.archivedAt=null;}
+    localSave(docs);return{ok:true};
+  }
+  return{ok:true};
+}
+
+// ═══ PAGE NAV ═══
+let _pageHistory=['p-login'];
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  window.scrollTo(0,0);
+  if(_pageHistory[_pageHistory.length-1]!==id)_pageHistory.push(id);
+}
+function goBack(cur){
+  _pageHistory.pop();
+  const prev=_pageHistory[_pageHistory.length-1]||'p-login';
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.getElementById(prev).classList.add('on');
+  window.scrollTo(0,0);
+}
+
+// ═══ PASSWORD ═══
+function getPW(r){return localStorage.getItem('pw_'+r)||{hr:'hr123',exec:'exec123',dept:'dept123'}[r];}
+function savePasswords(){
+  const pairs=[['hr','pw-hr'],['exec','pw-ex'],['dept','pw-dept']];
+  let changed=0;
+  for(const[role,pfx]of pairs){
+    const ov=document.getElementById(pfx+'-old').value;
+    const nv=document.getElementById(pfx+'-new').value;
+    if(!ov&&!nv)continue;
+    if(ov!==getPW(role)){toast(`❌ ${role} 目前密碼錯誤`);return;}
+    if(nv.length<4){toast('新密碼至少 4 個字元');return;}
+    localStorage.setItem('pw_'+role,nv);changed++;
+  }
+  toast(changed?`✅ 已更新 ${changed} 組密碼`:'請填寫目前密碼與新密碼');
+  ['pw-hr-old','pw-hr-new','pw-ex-old','pw-ex-new','pw-dept-old','pw-dept-new'].forEach(id=>document.getElementById(id).value='');
+}
+
+// ═══ LOGIN ═══
+let role='hr',deptUnit='';
+function setRole(r){
+  role=r;
+  ['hr','exec','dept'].forEach(x=>document.getElementById('r-'+x).classList.toggle('sel',x===r));
+  document.getElementById('dept-pick').style.display=r==='dept'?'block':'none';
+}
+function doLogin(){
+  const pw=document.getElementById('ln-pw').value;
+  if(role==='hr'&&pw===getPW('hr')){_pageHistory=['p-login'];showPage('p-hr');initHR();return;}
+  if(role==='exec'&&pw===getPW('exec')){_pageHistory=['p-login'];showPage('p-exec');initExec();return;}
+  if(role==='dept'){
+    deptUnit=document.getElementById('ln-dept').value;
+    if(!deptUnit){toast('請選擇單位');return;}
+    if(pw!==getPW('dept')){toast('密碼錯誤');return;}
+    _pageHistory=['p-login'];showPage('p-dept');run(async()=>await initDept());return;
+  }
+  toast('密碼錯誤');
+}
+
+// ═══ NOTIFICATION ═══
+async function showNotif(forRole){
+  const docs=await loadDocs();const items=[];
+  if(forRole==='hr'){
+    const pend=docs.filter(d=>d.stage==='待核示');
+    const waitU=[];docs.filter(d=>d.stage==='待簽收').forEach(d=>d.units.forEach(u=>{if(d.recv[u]==='wait')waitU.push(`${d.id} ${u}`);}));
+    const noFile=docs.filter(d=>!d.fileUrl&&d.stage!=='待核示');
+    if(pend.length)items.push({dot:'br',txt:`有 ${pend.length} 份公文待執行董事核示`,sub:pend.map(d=>d.subject.slice(0,18)).join('、')});
+    if(waitU.length)items.push({dot:'br',txt:`有 ${waitU.length} 個單位尚未簽收`,sub:waitU.slice(0,3).join('、')+(waitU.length>3?'…':'')});
+    if(noFile.length)items.push({dot:'gn',txt:`有 ${noFile.length} 份公文尚未上傳掃描檔`,sub:noFile.map(d=>d.id).slice(0,3).join('、')});
+  }
+  if(forRole==='exec'){
+    const pend=docs.filter(d=>d.stage==='待核示');
+    if(pend.length)items.push({dot:'rd',txt:`您有 ${pend.length} 份公文待核示`,sub:pend.map(d=>`${d.org}：${d.subject.slice(0,15)}`).join(' / ')});
+    else return;
+  }
+  if(forRole==='dept'){
+    const my=docs.filter(d=>d.units.includes(deptUnit)&&d.recv[deptUnit]==='wait');
+    if(my.length)items.push({dot:'rd',txt:`${deptUnit} 有 ${my.length} 份公文待簽收`,sub:my.map(d=>d.subject.slice(0,18)).join('、')});
+    const noH=docs.filter(d=>d.units.includes(deptUnit)&&d.recv[deptUnit]==='done'&&(!d.handler||!d.handler[deptUnit]||!d.handler[deptUnit].name));
+    if(noH.length)items.push({dot:'br',txt:`有 ${noH.length} 份公文尚未填寫承辦人`,sub:noH.map(d=>d.id).join('、')});
+    if(!items.length)return;
+  }
+  if(!items.length)return;
+  const d=new Date();
+  document.getElementById('notif-date').textContent=`${d.getFullYear()-1911}年${d.getMonth()+1}月${d.getDate()}日`;
+  document.getElementById('notif-body').innerHTML=items.map(it=>`
+    <div class="notif-item">
+      <div class="notif-dot ${it.dot}"></div>
+      <div><div class="notif-item-txt">${it.txt}</div>
+        <div class="notif-item-sub">${it.sub||''}</div></div>
+    </div>`).join('');
+  document.getElementById('notif-bg').classList.add('open');
+}
+function closeNotif(){document.getElementById('notif-bg').classList.remove('open');}
+
+// ═══ HR ═══
+function updateRoptStyle(){
+  document.querySelectorAll('.ropt').forEach(el=>{
+    el.classList.toggle('sel',el.querySelector('input').checked);
+  });
+}
+function initHR(){
+  document.getElementById('fd').value=new Date().toISOString().slice(0,10);
+  run(async()=>{await renderHR();await showNotif('hr');});
+}
+function hrTab(t,tabBtn){
+  ['docs','track','add','arch','print'].forEach(k=>{
+    const tb=document.getElementById('hrtab-'+k);
+    const nb=document.getElementById('hrnb-'+k);
+    const pn=document.getElementById('hr-'+k+'-panel');
+    if(tb)tb.classList.toggle('on',k===t);
+    if(nb)nb.classList.toggle('on',k===t);
+    if(pn)pn.style.display=k===t?'block':'none';
+  });
+  if(t==='docs')  run(async()=>await renderHR());
+  if(t==='track') run(async()=>await renderTrack());
+  if(t==='arch')  run(async()=>await renderArch());
+  if(t==='print'){document.getElementById('print-date-mode').value='today';onPrintModeChange();document.getElementById('print-preview').style.display='none';}
+}
+
+const urgBdg={'普通':'bdg-norm','重要':'bdg-imp','急件':'bdg-urg','最速件':'bdg-max'};
+const stageBdg={'待核示':'bdg-pend','待簽收':'bdg-wait','完成':'bdg-done'};
+const stages=['待核示','待簽收','完成'];
+
+// 日期正規化：把各種格式統一成 YYYY-MM-DD
+function normDate(d){
+  if(!d) return '';
+  const s = String(d);
+  // ISO 格式：2026-06-06T16:00:00.000Z
+  if(s.includes('T')) return s.slice(0,10);
+  // 已經是 YYYY-MM-DD
+  return s.slice(0,10);
+}
+// 民國年顯示
+function rocDate(d){
+  const s=normDate(d); if(!s) return '—';
+  const dt=new Date(s+'T00:00:00');
+  return `${dt.getFullYear()-1911}年${dt.getMonth()+1}月${dt.getDate()}日`;
+}
+
+async function renderHR(){
+  const docs=await loadDocs(),today=new Date().toISOString().slice(0,10);
+  // 日期正規化後比對
+  // 顯示最近 2 天
+  const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);
+  const yd=yesterday.toISOString().slice(0,10);
+  const td=docs.filter(d=>{ const nd=normDate(d.date); return nd===today||nd===yd; });
+  const s1=docs.filter(d=>d.stage==='待核示').length;
+  const s2=docs.filter(d=>d.stage==='待簽收').length;
+  const s3=docs.filter(d=>d.stage==='完成').length;
+  document.getElementById('st0').textContent=td.length;
+  document.getElementById('st1').textContent=s1;
+  document.getElementById('st2').textContent=s2;
+  document.getElementById('st3').textContent=s3;
+  document.getElementById('hr-badge').textContent=`待核示 ${s1}`;
+  document.getElementById('hr-ntfy-dot').style.display=s1?'block':'none';
+
+  const q=(document.getElementById('hr-search')||{}).value||'';
+  const filtered=td.filter(d=>!q||d.id.includes(q)||d.org.includes(q)||d.subject.includes(q)||(d.no&&d.no.includes(q)));
+  const list=document.getElementById('hr-list');
+  const empty=document.getElementById('hr-empty');
+  list.innerHTML='';empty.style.display=filtered.length?'none':'block';
+
+  // 搜尋有結果但查無今日，提示已歸檔
+  if(q&&!filtered.length){
+    const archDocs=apiLocal('getArchived',{}).filter(d=>d.id.includes(q)||d.org.includes(q)||d.subject.includes(q));
+    if(archDocs.length){
+      empty.innerHTML=`<div class="empty-ico">🗄️</div><div class="empty-txt">主清單查無結果<br>但在<b>已歸檔</b>區找到 ${archDocs.length} 筆符合公文<br><button class="btn-f sl" style="margin-top:8px;font-size:12px" onclick="hrTab('arch',document.getElementById('hrtab-arch'))">前往已歸檔查看</button></div>`;
+    }
+  }
+
+  filtered.forEach(doc=>{
+    const tc=doc.type==='電子公文'?'bdg-e':doc.type==='紙本公文'?'bdg-p':'bdg-m';
+    const si=stages.indexOf(doc.stage);
+    const flow=stages.map((s,i)=>{
+      const cl=i<si?'fp-done':i===si?'fp-cur':'fp-wait';
+      return `<span class="fp ${cl}"><span class="dot"></span>${s}</span>${i<2?'<span class="fp-arr">›</span>':''}`;
+    }).join('');
+    const upills=doc.units.length
+      ?doc.units.map(u=>`<span class="upill ${doc.recv[u]==='done'?'up-done':'up-wait'}"><span class="dot"></span>${u}${doc.recv[u]==='done'?' ✓':''}</span>`).join('')
+      :'<span style="font-size:12px;color:var(--dim)">待分配單位</span>';
+    const el=document.createElement('div');el.className='doc-card';
+    el.innerHTML=`
+      <div class="dc-head">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;flex:1">
+          <input type="checkbox" class="doc-check" data-id="${doc.id}" onchange="updateCheckedCount()"
+            style="width:16px;height:16px;accent-color:var(--gn2);flex-shrink:0">
+          <span class="dc-no">${doc.id}</span>
+        </label>
+        <div class="bdg-row" style="margin:0">
+          <span class="bdg ${tc}">${doc.type}</span>
+          <span class="bdg ${urgBdg[doc.urg]||'bdg-norm'}">${doc.urg}</span>
+          <span class="bdg ${stageBdg[doc.stage]||'bdg-norm'}">${doc.stage}</span>
+        </div>
+      </div>
+      <div class="dc-body">
+        <div class="dc-subj">${doc.subject}</div>
+        <div class="dc-org">${doc.org}${doc.no?' ｜ '+doc.no:''}</div>
+        <div class="flow">${flow}</div>
+        <div class="urow">${upills}</div>
+        ${doc.note?`<div class="note-chip">📌 ${doc.note}</div>`:''}
+        <div class="retention-tag">📁 ${RETENTION_LABELS[doc.retention]||'保存 3 年'}　${calcExpire(doc.date,doc.retention)}</div>
+        ${doc.fileUrl?`<a class="file-link" href="${doc.fileUrl}" target="_blank"><span class="file-link-ico">📄</span><div><div class="file-link-txt">查看公文掃描檔</div><div class="file-link-sub">點擊開啟 Google Drive</div></div></a>`:`<div class="file-none">📎 尚未上傳掃描檔</div>`}
+        <div class="dc-actions">
+          ${doc.stage==='待簽收'?`<button class="btn-o" onclick="openNotifySheet('${doc.id}')">📤 傳送通知</button>`:''}
+          <button class="btn-f sl" onclick="openEditSheet('${doc.id}')">✏️ 編輯</button>
+          <button class="btn-f"   onclick="hrViewDetail('${doc.id}')">🔍 詳情</button>
+          <button class="btn-f rd" onclick="confirmDelete('${doc.id}')">🗑️ 刪除</button>
+          ${doc.stage==='完成'?`<button class="btn-f br" onclick="openArchSheet('${doc.id}')">🗄️ 歸檔</button>`:''}
+        </div>
+      </div>`;
+    list.appendChild(el);
+  });
+}
+
+function addDoc(){
+  const org=document.getElementById('forg').value.trim();
+  const sub=document.getElementById('fsub').value.trim();
+  if(!org||!sub){toast('請填寫來文機關與主旨');return;}
+  const retEl=document.querySelector('input[name="retention"]:checked');
+  const retention=retEl?retEl.value:'3';
+  run(async()=>{
+    const doc={date:document.getElementById('fd').value,
+      type:document.getElementById('ft').value,
+      no:document.getElementById('fno').value,
+      org,subject:sub,
+      urg:document.getElementById('furg').value,
+      note:document.getElementById('fnote').value,
+      fileUrl:document.getElementById('ffile').value.trim(),
+      retention};
+    await api('addDoc',{doc});
+    ['fno','forg','fsub','fnote','ffile'].forEach(x=>document.getElementById(x).value='');
+    document.getElementById('furg').value='普通';
+    // 重設年限選擇
+    document.querySelector('input[name="retention"][value="3"]').checked=true;
+    updateRoptStyle();
+    hrTab('docs',document.getElementById('hrtab-docs'));
+    toast('✅ 已登記，執行董事將收到通知');
+  });
+}
+
+// ─── 歸檔 ───
+function openArchSheet(docId){
+  run(async()=>{
+    const docs=await loadDocs();
+    const doc=docs.find(d=>d.id===docId);
+    if(!doc){toast('找不到公文');return;}
+    document.getElementById('arch-doc-id').value=docId;
+    document.getElementById('arch-doc-info').innerHTML=
+      `<b>${doc.id}</b>　${doc.org}<br>${doc.subject}`;
+    document.getElementById('arch-retention-display').textContent=
+      RETENTION_LABELS[doc.retention]||'保存 3 年';
+    document.getElementById('arch-expire-display').textContent=
+      `到期時間：${calcExpire(doc.date,doc.retention)}（從登錄日 ${doc.date} 起算）`;
+    document.getElementById('arch-sheet').classList.add('open');
+  });
+}
+function confirmArchive(){
+  const docId=document.getElementById('arch-doc-id').value;
+  run(async()=>{
+    await api('archiveDoc',{docId});
+    closeSheet('arch-sheet');
+    await renderHR();
+    toast('✅ 已歸檔，可至「已歸檔」區查閱');
+  });
+}
+
+// ─── 已歸檔清單 ───
+let _archYear='all',_archRetention='all';
+function setArchFilter(f,btn){
+  _archRetention=f;
+  document.querySelectorAll('#hr-arch-panel .tab-row:nth-child(2) .fbtn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderArch();
+}
+async function renderArch(){
+  const allArch=apiLocal('getArchived',{});
+  // 建立年度 tab
+  const years=[...new Set(allArch.map(d=>d.id.split('-')[0]))].sort((a,b)=>b-a);
+  const yearTabEl=document.getElementById('arch-year-tabs');
+  if(yearTabEl.children.length===0||yearTabEl.dataset.built!=='1'){
+    yearTabEl.innerHTML='';
+    const allBtn=document.createElement('button');
+    allBtn.className='fbtn on';allBtn.textContent='全部年度';
+    allBtn.onclick=()=>{_archYear='all';document.querySelectorAll('#arch-year-tabs .fbtn').forEach(b=>b.classList.remove('on'));allBtn.classList.add('on');renderArch();};
+    yearTabEl.appendChild(allBtn);
+    years.forEach(yr=>{
+      const btn=document.createElement('button');
+      btn.className='fbtn';btn.textContent=yr+'年度';
+      btn.onclick=()=>{_archYear=yr;document.querySelectorAll('#arch-year-tabs .fbtn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');renderArch();};
+      yearTabEl.appendChild(btn);
+    });
+    yearTabEl.dataset.built='1';
+  }
+
+  let docs=allArch;
+  if(_archYear!=='all') docs=docs.filter(d=>d.id.startsWith(_archYear+'-'));
+  if(_archRetention!=='all') docs=docs.filter(d=>d.retention===_archRetention);
+  const q=(document.getElementById('arch-search')||{}).value||'';
+  if(q) docs=docs.filter(d=>d.id.includes(q)||d.org.includes(q)||d.subject.includes(q));
+  docs.sort((a,b)=>b.id.localeCompare(a.id));
+
+  const list=document.getElementById('arch-list');
+  const empty=document.getElementById('arch-empty');
+  list.innerHTML='';empty.style.display=docs.length?'none':'block';
+
+  docs.forEach(doc=>{
+    const el=document.createElement('div');el.className='doc-card';
+    const arAt=doc.archivedAt?new Date(doc.archivedAt).toLocaleDateString('zh-TW'):'—';
+    el.innerHTML=`
+      <div class="dc-head">
+        <span class="dc-no">${doc.id}</span>
+        <div class="bdg-row" style="margin:0">
+          <span class="bdg bdg-arch">已歸檔</span>
+          <span class="bdg bdg-norm">${doc.urg}</span>
+        </div>
+      </div>
+      <div class="dc-body">
+        <div class="dc-subj">${doc.subject}</div>
+        <div class="dc-org">${doc.org}${doc.no?' ｜ '+doc.no:''}</div>
+        <div class="retention-tag">📁 ${RETENTION_LABELS[doc.retention]||'保存 3 年'}　${calcExpire(doc.date,doc.retention)}</div>
+        <div style="font-size:11px;color:var(--dim);margin-top:4px">歸檔日期：${arAt}</div>
+        ${doc.fileUrl?`<a class="file-link" href="${doc.fileUrl}" target="_blank"><span class="file-link-ico">📄</span><div><div class="file-link-txt">查看公文掃描檔</div><div class="file-link-sub">點擊開啟 Google Drive</div></div></a>`:`<div class="file-none">📎 無附件連結</div>`}
+        <div class="dc-actions">
+          <button class="btn-f sl" onclick="restoreDoc('${doc.id}')">↩️ 恢復到主清單</button>
+        </div>
+      </div>`;
+    list.appendChild(el);
+  });
+}
+function restoreDoc(docId){
+  if(!confirm('確定要將此公文恢復到主清單嗎？')) return;
+  run(async()=>{
+    await api('restoreDoc',{docId});
+    await renderArch();
+    toast('✅ 已恢復到主清單');
+  });
+}
+function exportArchExcel(){
+  const allArch=apiLocal('getArchived',{});
+  let docs=allArch;
+  if(_archYear!=='all') docs=docs.filter(d=>d.id.startsWith(_archYear+'-'));
+  if(_archRetention!=='all') docs=docs.filter(d=>d.retention===_archRetention);
+  if(!docs.length){toast('目前無歸檔公文可匯出');return;}
+
+  // 產生 CSV（Excel 可開啟）
+  const BOM='\uFEFF';
+  const headers=['公文號','收文日期','類型','來文機關','來文字號','主旨摘要','緊急程度','保存年限','到期日','分發單位','歸檔日期','掃描檔連結'];
+  const rows=docs.map(d=>[
+    d.id,d.date,d.type,d.org,d.no||'',
+    `"${d.subject.replace(/"/g,'""')}"`,
+    d.urg,RETENTION_LABELS[d.retention]||'保存3年',
+    calcExpire(d.date,d.retention),
+    (d.units||[]).join('、'),
+    d.archivedAt?new Date(d.archivedAt).toLocaleDateString('zh-TW'):'—',
+    d.fileUrl||''
+  ]);
+  const csv=BOM+[headers,...rows].map(r=>r.join(',')).join('\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  const a=document.createElement('a');
+  const yr=_archYear==='all'?'全部年度':_archYear+'年度';
+  a.href=URL.createObjectURL(blob);
+  a.download=`賢德醫院公文歸檔清單_${yr}.csv`;
+  a.click();
+  toast('✅ 已下載 Excel 清單');
+}
+
+// ─── 追蹤清單 ───
+let _trackFilter='all';
+function setTrackFilter(f,btn){
+  _trackFilter=f;
+  document.querySelectorAll('#hr-track-panel .tab-row .fbtn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');run(async()=>await renderTrack());
+}
+async function renderTrack(){
+  const all=await loadDocs();
+  const docs=_trackFilter==='all'?all:all.filter(d=>d.stage===_trackFilter);
+  const rows=document.getElementById('track-rows');
+  const empty=document.getElementById('track-empty');
+  rows.innerHTML='';empty.style.display=docs.length?'none':'block';
+  const stC={'待核示':'var(--purple)','待簽收':'var(--amber)','完成':'var(--green)'};
+  const urgC={'普通':'var(--sub)','重要':'var(--purple)','急件':'var(--amber)','最速件':'var(--red)'};
+  docs.forEach((doc,i)=>{
+    const row=document.createElement('div');row.className='track-row';
+    row.style.background=i%2===0?'var(--card)':'var(--bg2)';
+    row.innerHTML=`
+      <div class="track-row-no">${doc.id}</div>
+      <div><div class="track-row-subj">${doc.subject}</div><div class="track-row-org">${doc.org}</div></div>
+      <div class="track-row-cell" style="color:${stC[doc.stage]||'var(--sub)'}">${doc.stage}</div>
+      <div class="track-row-cell" style="color:${urgC[doc.urg]||'var(--sub)'}">${doc.urg}</div>`;
+    row.onclick=()=>openTrackDetail(doc);
+    rows.appendChild(row);
+  });
+}
+function openTrackDetail(doc){
+  if(!doc)return;
+  document.getElementById('ns-title').textContent='公文詳情 — '+doc.id;
+  const stC={'待核示':'var(--purple)','待簽收':'var(--amber)','完成':'var(--green)'};
+  const unitRows=doc.units.length?doc.units.map(u=>{
+    const s=doc.recv[u];const h=doc.handler&&doc.handler[u]&&doc.handler[u].name?`承辦：${doc.handler[u].name}`:'';
+    return `<div class="line-row"><div><div class="lr-name">${u}</div>
+      <div class="lr-st ${s==='done'?'done':'wait'}">${s==='done'?'✓ 已簽收':'⏳ 未簽收'}${h?' ｜ '+h:''}</div></div>
+      ${s!=='done'?`<button class="btn-ln" onclick="openNotifySheet('${doc.id}')">通知</button>`:''}
+    </div>`;}).join('')
+    :'<div style="font-size:12px;color:var(--sub);padding:8px 0">尚待執行董事分配單位</div>';
+  document.getElementById('ns-body').innerHTML=`
+    <div class="doc-card" style="margin-bottom:12px">
+      <div class="dc-body">
+        <div class="dc-subj">${doc.subject}</div>
+        <div class="dc-org">${doc.org}${doc.no?' ｜ '+doc.no:''}</div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;margin:7px 0">
+          <span class="bdg bdg-norm">${rocDate(doc.date)}</span>
+          <span class="bdg bdg-norm">${doc.type}</span>
+          <span class="bdg" style="background:${stC[doc.stage]+'22'};color:${stC[doc.stage]};border-color:${stC[doc.stage]+'55'}">${doc.stage}</span>
+          ${doc.note?`<div class="note-chip">📌 ${doc.note}</div>`:''}
+        </div>
+        <div class="retention-tag">📁 ${RETENTION_LABELS[doc.retention]||'保存3年'}　${calcExpire(doc.date,doc.retention)}</div>
+        ${doc.fileUrl?`<a class="file-link" href="${doc.fileUrl}" target="_blank"><span class="file-link-ico">📄</span><div><div class="file-link-txt">查看公文掃描檔</div></div></a>`:''}
+        <div style="display:flex;gap:7px;margin-top:10px">
+          <button class="btn-f sl" onclick="closeSheet('notify-sheet');openEditSheet('${doc.id}')">✏️ 編輯</button>
+          <button class="btn-f rd" onclick="closeSheet('notify-sheet');confirmDelete('${doc.id}')">🗑️ 刪除</button>
+        </div>
+      </div>
+    </div>
+    <div class="sec">各單位簽收狀況</div>${unitRows}`;
+  document.getElementById('notify-sheet').classList.add('open');
+}
+function hrViewDetail(docId){run(async()=>{const docs=await loadDocs();openTrackDetail(docs.find(d=>d.id===docId));});}
+
+// ─── 勾選相關 ───
+function updateCheckedCount(){
+  const checked=document.querySelectorAll('.doc-check:checked').length;
+  const el=document.getElementById('checked-count');
+  if(el) el.textContent=`已選 ${checked} 筆`;
+  const allBox=document.getElementById('check-all');
+  const allBoxes=document.querySelectorAll('.doc-check');
+  if(allBox&&allBoxes.length) allBox.checked=checked===allBoxes.length&&allBoxes.length>0;
+}
+function toggleCheckAll(cb){
+  document.querySelectorAll('.doc-check').forEach(el=>el.checked=cb.checked);
+  updateCheckedCount();
+}
+
+async function printChecked(){
+  const checked=[...document.querySelectorAll('.doc-check:checked')].map(el=>el.dataset.id);
+  if(!checked.length){toast('請先勾選要列印的公文');return;}
+
+  // 手動輸入第幾次送簽
+  const batch=prompt('請輸入本次送簽次數（如：第1次、第2次）：','第1次');
+  if(batch===null) return; // 取消
+
+  run(async()=>{
+    const allDocs=await loadDocs();
+    const docs=checked.map(id=>allDocs.find(d=>d.id===id)).filter(Boolean);
+    if(!docs.length){toast('找不到公文資料');return;}
+
+    const d=new Date();
+    const dateStr=`${d.getFullYear()-1911}年${d.getMonth()+1}月${d.getDate()}日`;
+
+    // 填入送簽清單
+    document.getElementById('psub-meta').textContent=
+      `${dateStr}　${batch}　共 ${docs.length} 件　承辦：人事室`;
+
+    document.getElementById('psign-tbody').innerHTML=docs.map((doc,i)=>`
+      <tr style="background:${i%2===0?'#fff':'#f8f8f8'}">
+        <td style="padding:7px 8px;text-align:center;color:#666">${i+1}</td>
+        <td style="padding:7px 8px;font-weight:700;color:#2d5a3d">${doc.id}</td>
+        <td style="padding:7px 8px;color:#555">${rocDate(doc.date)}</td>
+        <td style="padding:7px 8px;font-size:10px">${doc.no||'—'}</td>
+        <td style="padding:7px 8px">${doc.org}</td>
+        <td style="padding:7px 8px;line-height:1.5">${doc.subject}</td>
+        <td style="padding:7px 8px;font-size:10px">${doc.urg}</td>
+      </tr>`).join('');
+
+    document.getElementById('psign-footer').textContent=
+      `列印時間：${d.toLocaleString('zh-TW')}　正本存：人事室`;
+
+    // 切換到送簽清單樣式
+    document.getElementById('print-sign-list').style.display='block';
+    document.getElementById('print-general-list').style.display='none';
+    document.getElementById('print-doc').style.display='block';
+    window.print();
+    setTimeout(()=>{
+      document.getElementById('print-doc').style.display='none';
+      document.getElementById('print-sign-list').style.display='none';
+      document.getElementById('print-general-list').style.display='block';
+    },500);
+  });
+}
+
+// ─── 刪除公文 ───
+function confirmDelete(docId){
+  run(async()=>{
+    const docs=await loadDocs();
+    const doc=docs.find(d=>d.id===docId);
+    if(!doc){toast('找不到公文');return;}
+    // 關閉任何開著的 sheet
+    ['notify-sheet','edit-sheet'].forEach(id=>document.getElementById(id).classList.remove('open'));
+    // 顯示確認視窗
+    const confirmed=confirm(`確定要刪除這份公文嗎？
+
+公文號：${doc.id}
+主旨：${doc.subject}
+來文機關：${doc.org}
+
+⚠️ 刪除後無法復原`);
+    if(!confirmed) return;
+    await api('deleteDoc',{docId});
+    await renderHR();
+    toast('✅ 已刪除公文 '+docId);
+  });
+}
+
+// ─── 通知 sheet ───
+function openNotifySheet(docId){
+  run(async()=>{
+    const docs=await loadDocs();const doc=docs.find(d=>d.id===docId);
+    document.getElementById('ns-title').textContent='傳送收件通知 — '+doc.id;
+    const body=document.getElementById('ns-body');body.innerHTML='';
+    doc.units.forEach(u=>{
+      const s=doc.recv[u];const row=document.createElement('div');row.className='line-row';
+      row.innerHTML=`<div><div class="lr-name">${u}</div>
+        <div class="lr-st ${s==='done'?'done':'wait'}">${s==='done'?'✓ 已簽收':'⏳ 未簽收'}</div></div>
+        <div class="lr-btns">
+          <button class="btn-cp" onclick="copyLink('${docId}','${u}')">複製連結</button>
+          <button class="btn-ln" onclick="sendLine('${docId}','${u}')">LINE</button>
+        </div>`;
+      body.appendChild(row);
+    });
+    document.getElementById('notify-sheet').classList.add('open');
+  });
+}
+function copyLink(docId,unit){
+  const url=`${location.href.split('?')[0]}?doc=${docId}&unit=${encodeURIComponent(unit)}`;
+  navigator.clipboard?.writeText(url).catch(()=>{});toast('✅ 已複製 '+unit+' 連結');
+}
+function sendLine(docId,unit){
+  run(async()=>{
+    const docs=await loadDocs();const doc=docs.find(d=>d.id===docId);
+    const url=`${location.href.split('?')[0]}?doc=${docId}&unit=${encodeURIComponent(unit)}`;
+    const msg=encodeURIComponent(`【賢德醫院 人事室公文通知】\n${unit} 您好，有新公文待收件確認。\n\n公文主旨：${doc.subject}\n來文機關：${doc.org}\n\n請點擊連結確認收件：\n${url}`);
+    window.open('https://line.me/R/msg/text/?'+msg,'_blank');
+  });
+}
+
+// ─── 編輯公文 ───
+function openEditSheet(docId){
+  run(async()=>{
+    const docs=await loadDocs();const doc=docs.find(d=>d.id===docId);
+    if(!doc){toast('找不到公文');return;}
+    document.getElementById('edit-doc-id').value=docId;
+    document.getElementById('edit-org').value=doc.org||'';
+    document.getElementById('edit-no').value=doc.no||'';
+    document.getElementById('edit-subject').value=doc.subject||'';
+    document.getElementById('edit-urg').value=doc.urg||'普通';
+    document.getElementById('edit-note').value=doc.note||'';
+    document.getElementById('edit-file').value=doc.fileUrl||'';
+    document.getElementById('edit-sheet').classList.add('open');
+  });
+}
+function saveEdit(){
+  const docId=document.getElementById('edit-doc-id').value;
+  const fields={org:document.getElementById('edit-org').value.trim(),no:document.getElementById('edit-no').value.trim(),subject:document.getElementById('edit-subject').value.trim(),urg:document.getElementById('edit-urg').value,note:document.getElementById('edit-note').value.trim(),fileUrl:document.getElementById('edit-file').value.trim()};
+  if(!fields.org||!fields.subject){toast('來文機關與主旨不能為空');return;}
+  run(async()=>{await api('updateDoc',{docId,fields});closeSheet('edit-sheet');await renderHR();toast('✅ 公文已更新');});
+}
+
+// ═══ EXEC ═══
+function initExec(){
+  const d=new Date();
+  document.getElementById('ex-date').textContent=`${d.getMonth()+1}/${d.getDate()}`;
+  run(async()=>{await renderExec();await showNotif('exec');});
+}
+async function renderExec(){
+  const docs=(await loadDocs()).filter(d=>d.stage==='待核示');
+  document.getElementById('ex-badge').textContent='待核示 '+docs.length;
+  document.getElementById('ex-cnt').textContent='待核示 '+docs.length+' 件';
+  const list=document.getElementById('ex-list');
+  const empty=document.getElementById('ex-empty');
+  list.innerHTML='';empty.style.display=docs.length?'none':'block';
+  docs.forEach(doc=>{
+    const tc=doc.type==='電子公文'?'bdg-e':doc.type==='紙本公文'?'bdg-p':'bdg-m';
+    const el=document.createElement('div');el.className='doc-card';
+    el.innerHTML=`
+      <div class="dc-head"><span class="dc-no">${doc.id}</span>
+        <div class="bdg-row" style="margin:0"><span class="bdg ${tc}">${doc.type}</span><span class="bdg ${urgBdg[doc.urg]||'bdg-norm'}">${doc.urg}</span></div>
+      </div>
+      <div class="dc-body">
+        <div class="dc-subj">${doc.subject}</div>
+        <div class="dc-org">${doc.org}${doc.no?' ｜ '+doc.no:''}</div>
+        ${doc.note?`<div class="note-chip">📌 ${doc.note}</div>`:''}
+        ${doc.fileUrl?`<a class="file-link" href="${doc.fileUrl}" target="_blank"><span class="file-link-ico">📄</span><div><div class="file-link-txt">查看公文內容</div></div></a>`:''}
+        <button class="btn-full" style="margin-top:10px" onclick="openExSheet('${doc.id}')">✍️ 核示並分配單位</button>
+      </div>`;
+    list.appendChild(el);
+  });
+}
+function exTab(t,btn){
+  document.querySelectorAll('#p-exec .bnav .nb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  if(t==='done'){
+    run(async()=>{
+      const docs=(await loadDocs()).filter(d=>d.stage!=='待核示');
+      const list=document.getElementById('ex-list');const empty=document.getElementById('ex-empty');
+      list.innerHTML='';empty.style.display=docs.length?'none':'block';
+      docs.forEach(doc=>{
+        const el=document.createElement('div');el.className='doc-card';
+        el.innerHTML=`<div class="dc-head"><span class="dc-no">${doc.id}</span><span class="bdg ${stageBdg[doc.stage]||'bdg-norm'}">${doc.stage}</span></div>
+          <div class="dc-body"><div class="dc-subj">${doc.subject}</div><div class="dc-org">${doc.org}</div>
+          <div class="urow">${doc.units.map(u=>`<span class="upill ${doc.recv[u]==='done'?'up-done':'up-wait'}"><span class="dot"></span>${u}</span>`).join('')}</div></div>`;
+        list.appendChild(el);
+      });
+    });
+  } else run(async()=>await renderExec());
+}
+
+let currentExDocId=null,exSelUnits=new Set(),exSigned=false;
+function openExSheet(docId){
+  currentExDocId=docId;exSelUnits=new Set();exSigned=false;
+  run(async()=>{
+    const docs=await loadDocs();const doc=docs.find(d=>d.id===docId);
+    document.getElementById('ex-sh-title').textContent='核示：'+doc.subject.slice(0,16)+'…';
+    const body=document.getElementById('ex-sh-body');
+    body.innerHTML=`
+      <div class="doc-card" style="margin-bottom:14px"><div class="dc-body">
+        <div class="dc-subj">${doc.subject}</div>
+        <div class="dc-org">${doc.org}${doc.no?' ｜ '+doc.no:''}</div>
+        ${doc.note?`<div class="note-chip">📌 ${doc.note}</div>`:''}
+      </div></div>
+      <div class="sec">勾選分配單位</div>
+      <div class="unit-sel-grid" id="ex-unit-grid"></div>
+      <div class="sec">手寫簽名</div>
+      <div class="sigwrap"><canvas class="sigcv" id="ex-cv" height="120"></canvas>
+        <div class="sighint" id="ex-hint">請在此處手寫簽名</div></div>
+      <div class="sig-btns" style="margin-bottom:8px">
+        <button class="btn-sc" onclick="exClear()">清除</button>
+        <button class="btn-so" onclick="exConfirmSig()">確認簽名</button>
+      </div>
+      <button class="btn-full" id="ex-submit" disabled onclick="submitExec()">完成核示，通知各單位</button>`;
+    const grid=document.getElementById('ex-unit-grid');
+    UNITS.forEach(u=>{
+      const el=document.createElement('div');el.className='usi';el.dataset.unit=u;
+      el.innerHTML=`<div class="usi-box">✓</div><div class="usi-name">${u}</div>`;
+      el.onclick=()=>{exSelUnits.has(u)?exSelUnits.delete(u):exSelUnits.add(u);el.classList.toggle('on',exSelUnits.has(u));checkExReady();};
+      grid.appendChild(el);
+    });
+    document.getElementById('ex-sheet').classList.add('open');
+    setTimeout(()=>initSigCv(document.getElementById('ex-cv'),'ex-hint'),80);
+  });
+}
+function exClear(){const cv=document.getElementById('ex-cv');cv.getContext('2d').clearRect(0,0,cv.width,cv.height);document.getElementById('ex-hint').classList.remove('gone');exSigned=false;checkExReady();}
+function exConfirmSig(){const cv=document.getElementById('ex-cv');const d=cv.getContext('2d').getImageData(0,0,cv.width,cv.height).data;if(!Array.from(d).some((v,i)=>i%4===3&&v>10)){toast('請先手寫簽名');return;}exSigned=true;toast('✅ 簽名確認');checkExReady();}
+function checkExReady(){const btn=document.getElementById('ex-submit');if(btn)btn.disabled=!(exSelUnits.size>0&&exSigned);}
+function submitExec(){
+  if(!exSelUnits.size||!exSigned){toast('請選擇單位並完成簽名');return;}
+  const units=[...exSelUnits];
+  run(async()=>{await api('execSign',{docId:currentExDocId,units});closeSheet('ex-sheet');await renderExec();toast('✅ 核示完成，已通知 '+units.join('、'));});
+}
+
+// ═══ DEPT ═══
+let deptSigned=false;
+async function initDept(){
+  const d=new Date();
+  document.getElementById('dept-tb').textContent='🏥 '+deptUnit;
+  document.getElementById('dept-unit-name').textContent=deptUnit;
+  document.getElementById('dept-date-chip').textContent=`${d.getMonth()+1}月${d.getDate()}日`;
+  document.getElementById('dept-succ').classList.remove('on');
+  document.getElementById('dept-sigarea').style.display='block';
+  document.getElementById('dept-handler-area').style.display='none';
+  deptSigned=false;document.getElementById('dept-submit').disabled=true;
+  await renderDept();
+  setTimeout(()=>initSigCv(document.getElementById('dept-cv'),'dept-hint'),80);
+  await showNotif('dept');
+}
+async function renderDept(){
+  const docs=(await loadDocs()).filter(d=>d.units.includes(deptUnit)&&d.recv[deptUnit]==='wait');
+  document.getElementById('dept-cnt-chip').textContent='共 '+docs.length+' 件';
+  document.getElementById('dept-badge').textContent='待簽收 '+docs.length;
+  const list=document.getElementById('dept-list');const empty=document.getElementById('dept-empty');
+  list.innerHTML='';empty.style.display=(!docs.length)?'block':'none';
+  if(!docs.length){document.getElementById('dept-sigarea').style.display='none';return;}
+  document.getElementById('dept-sigarea').style.display='block';
+  docs.forEach(doc=>{
+    const tc=doc.type==='電子公文'?'bdg-e':doc.type==='紙本公文'?'bdg-p':'bdg-m';
+    const el=document.createElement('div');el.className='doc-card';
+    el.innerHTML=`
+      <div class="dc-head"><span class="dc-no">${doc.id}</span>
+        <div class="bdg-row" style="margin:0"><span class="bdg ${tc}">${doc.type}</span><span class="bdg ${urgBdg[doc.urg]||'bdg-norm'}">${doc.urg}</span></div>
+      </div>
+      <div class="dc-body">
+        <div class="dc-subj">${doc.subject}</div>
+        <div class="dc-org">${doc.org}${doc.no?' ｜ '+doc.no:''}</div>
+        ${doc.note?`<div class="note-chip">📌 ${doc.note}</div>`:''}
+        ${doc.fileUrl?`<a class="file-link" href="${doc.fileUrl}" target="_blank"><span class="file-link-ico">📄</span><div><div class="file-link-txt">查看公文內容</div><div class="file-link-sub">點擊開啟掃描檔</div></div></a>`:''}
+      </div>`;
+    list.appendChild(el);
+  });
+}
+function deptClear(){const cv=document.getElementById('dept-cv');cv.getContext('2d').clearRect(0,0,cv.width,cv.height);document.getElementById('dept-hint').classList.remove('gone');deptSigned=false;document.getElementById('dept-submit').disabled=true;}
+function deptConfirmSig(){const cv=document.getElementById('dept-cv');const d=cv.getContext('2d').getImageData(0,0,cv.width,cv.height).data;if(!Array.from(d).some((v,i)=>i%4===3&&v>10)){toast('請先手寫簽名');return;}deptSigned=true;document.getElementById('dept-submit').disabled=false;toast('✅ 簽名完成，請按確認收件');}
+function deptSubmit(){
+  const ids=localLoad().filter(d=>d.units.includes(deptUnit)&&d.recv[deptUnit]==='wait').map(d=>d.id);
+  run(async()=>{
+    for(const docId of ids)await api('deptRecv',{docId,unit:deptUnit});
+    const now=new Date();const ts=`${now.getMonth()+1}/${now.getDate()} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+    document.getElementById('dept-succ').classList.add('on');
+    document.getElementById('dept-succ-sub').textContent=`確認時間：${ts}　共 ${ids.length} 件`;
+    document.getElementById('dept-sigarea').style.display='none';
+    document.getElementById('dept-list').innerHTML='';
+    document.getElementById('dept-empty').style.display='none';
+    document.getElementById('dept-handler-area').style.display='block';
+    document.getElementById('dept-badge').textContent='待簽收 0';
+  });
+}
+function submitHandler(){
+  const name=document.getElementById('dept-handler-name').value.trim();
+  const note=document.getElementById('dept-handler-note').value.trim();
+  if(!name){toast('請填寫承辦人員姓名');return;}
+  run(async()=>{
+    const docs=await loadDocs();
+    for(const doc of docs){if(doc.units.includes(deptUnit))await api('setHandler',{docId:doc.id,unit:deptUnit,name,note});}
+    document.getElementById('dept-handler-area').style.display='none';toast('✅ 承辦資訊已儲存');
+  });
+}
+function deptTab(t,btn){
+  document.querySelectorAll('#p-dept .bnav .nb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('dept-inbox-content').style.display=t==='inbox'?'block':'none';
+  document.getElementById('dept-history-content').style.display=t==='history'?'block':'none';
+  if(t==='history') run(async()=>await renderHistory());
+}
+
+// ─── 歷史紀錄 ───
+let _histFilter='all';
+function setHistFilter(f,btn){
+  _histFilter=f;
+  document.querySelectorAll('#dept-history-content .tab-row .fbtn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');renderHistory();
+}
+async function renderHistory(){
+  const allDocs=await loadDocs();
+  // 同時檢查已歸檔
+  const archDocs=apiLocal('getArchived',{});
+  let docs=[...allDocs,...archDocs].filter(d=>d.units&&d.units.includes(deptUnit));
+  if(_histFilter==='done') docs=docs.filter(d=>d.recv[deptUnit]==='done');
+  if(_histFilter==='wait') docs=docs.filter(d=>d.recv[deptUnit]==='wait');
+  const q=(document.getElementById('hist-search')||{}).value||'';
+  if(q) docs=docs.filter(d=>d.id.includes(q)||d.org.includes(q)||d.subject.includes(q));
+  docs.sort((a,b)=>b.id.localeCompare(a.id));
+  const list=document.getElementById('hist-list');const empty=document.getElementById('hist-empty');
+  list.innerHTML='';empty.style.display=docs.length?'none':'block';
+  docs.forEach(doc=>{
+    const isDone=doc.recv[deptUnit]==='done';
+    const isArch=doc.archived;
+    const handler=doc.handler&&doc.handler[deptUnit];
+    const tc=doc.type==='電子公文'?'bdg-e':doc.type==='紙本公文'?'bdg-p':'bdg-m';
+    const el=document.createElement('div');el.className='doc-card';
+    el.innerHTML=`
+      <div class="dc-head"><span class="dc-no">${doc.id}</span>
+        <div class="bdg-row" style="margin:0">
+          <span class="bdg ${tc}">${doc.type}</span>
+          <span class="bdg ${isDone?'bdg-done':'bdg-wait'}">${isDone?'✓ 已簽收':'⏳ 待簽收'}</span>
+          ${isArch?'<span class="bdg bdg-arch">已歸檔</span>':''}
+        </div>
+      </div>
+      <div class="dc-body">
+        <div class="dc-subj">${doc.subject}</div>
+        <div class="dc-org">${doc.org}${doc.no?' ｜ '+doc.no:''}</div>
+        ${doc.note?`<div class="note-chip">📌 ${doc.note}</div>`:''}
+        ${isArch?`<div class="arch-banner">🗄️ 此公文已於 ${doc.archivedAt?new Date(doc.archivedAt).toLocaleDateString('zh-TW'):'—'} 歸檔，如需查閱原始文件請洽人事室</div>`:''}
+        ${handler&&handler.name?`<div style="margin-top:8px;padding:10px 12px;background:var(--gn-bg);border-radius:8px;border:1px solid var(--gn-lt)"><div style="font-size:11px;font-weight:700;color:var(--gn2);margin-bottom:3px">承辦資訊</div><div style="font-size:13px">👤 ${handler.name}</div>${handler.note?`<div style="font-size:12px;color:var(--sub);margin-top:2px">${handler.note}</div>`:''}</div>`:''}
+        ${doc.fileUrl&&!isArch?`<a class="file-link" href="${doc.fileUrl}" target="_blank"><span class="file-link-ico">📄</span><div><div class="file-link-txt">查看公文內容</div></div></a>`:''}
+        ${!isDone&&!isArch?`<button class="btn-full" style="margin-top:10px;padding:10px" onclick="deptTab('inbox',document.getElementById('dnb-inbox'))">前往簽收</button>`:''}
+      </div>`;
+    list.appendChild(el);
+  });
+}
+
+// ═══ 列印 ═══
+function onPrintModeChange(){
+  const mode=document.getElementById('print-date-mode').value;
+  document.getElementById('print-single-wrap').style.display=mode==='pick'?'block':'none';
+  document.getElementById('print-range-wrap').style.display=mode==='range'?'block':'none';
+  document.getElementById('print-preview').style.display='none';
+}
+function toggleAllStages(cb){['pf-pend','pf-recv','pf-done'].forEach(id=>document.getElementById(id).checked=cb.checked);}
+async function previewPrint(){
+  const mode=document.getElementById('print-date-mode').value;
+  const today=new Date().toISOString().slice(0,10);
+  let dateFrom,dateTo,label;
+  if(mode==='today'){dateFrom=dateTo=today;const d=new Date();label=`${d.getFullYear()-1911}年${d.getMonth()+1}月${d.getDate()}日`;}
+  else if(mode==='pick'){const v=document.getElementById('print-date-single').value;if(!v){toast('請選擇日期');return;}dateFrom=dateTo=v;label=v.replace(/-/g,'/');}
+  else{dateFrom=document.getElementById('print-date-from').value;dateTo=document.getElementById('print-date-to').value;if(!dateFrom||!dateTo){toast('請選擇起訖日期');return;}if(dateFrom>dateTo){toast('起始日期不能晚於結束日期');return;}label=`${dateFrom.replace(/-/g,'/')} ～ ${dateTo.replace(/-/g,'/')}`;}
+  const stages=[];
+  if(document.getElementById('pf-pend').checked)stages.push('待核示');
+  if(document.getElementById('pf-recv').checked)stages.push('待簽收');
+  if(document.getElementById('pf-done').checked)stages.push('完成');
+  if(!stages.length){toast('請至少選擇一個階段');return;}
+  run(async()=>{
+    const all=await loadDocs();
+    const docs=all.filter(d=>d.date>=dateFrom&&d.date<=dateTo&&stages.includes(d.stage));
+    if(!docs.length){toast('此條件查無公文');return;}
+    document.getElementById('print-preview-title').textContent=`預覽：${label}（共 ${docs.length} 件）`;
+    const stC={'待核示':'var(--purple)','待簽收':'var(--amber)','完成':'var(--green)'};
+    document.getElementById('print-table-wrap').innerHTML=`<table style="width:100%;border-collapse:collapse;font-size:12px;min-width:600px">
+      <thead><tr style="background:var(--gn2)">
+        ${['公文號','日期','機關','主旨摘要','緊急','階段','分發單位','保存年限'].map(h=>`<th style="padding:9px 10px;text-align:left;color:#fff;font-size:11px">${h}</th>`).join('')}
+      </tr></thead>
+      <tbody>${docs.map((d,i)=>`<tr style="background:${i%2===0?'var(--card)':'var(--bg2)'}">
+        <td style="padding:9px 10px;font-weight:700;color:var(--gn2)">${d.id}</td>
+        <td style="padding:9px 10px;color:var(--sub)">${d.date}</td>
+        <td style="padding:9px 10px">${d.org}</td>
+        <td style="padding:9px 10px;line-height:1.5">${d.subject}</td>
+        <td style="padding:9px 10px">${d.urg}</td>
+        <td style="padding:9px 10px;font-weight:600;color:${stC[d.stage]||'var(--sub)'}">${d.stage}</td>
+        <td style="padding:9px 10px;font-size:11px">${(d.units||[]).join('、')||'—'}</td>
+        <td style="padding:9px 10px;font-size:11px">${RETENTION_LABELS[d.retention]||'保存3年'}</td>
+      </tr>`).join('')}</tbody></table>`;
+    document.getElementById('print-preview').style.display='block';
+    const d2=new Date();
+    document.getElementById('pt-sub').textContent=`日期：${label}　共 ${docs.length} 件　列印：${d2.getFullYear()-1911}年${d2.getMonth()+1}月${d2.getDate()}日`;
+    document.getElementById('pt-tbody').innerHTML=docs.map(d=>`<tr>
+      <td>${d.id}</td><td>${d.date}</td><td>${d.type.replace('公文','').replace('信件','Mail')}</td>
+      <td>${d.org}${d.no?'<br><small>'+d.no+'</small>':''}</td>
+      <td>${d.subject}</td><td>${d.urg}</td><td style="font-weight:600">${d.stage}</td>
+      <td style="font-size:10px">${(d.units||[]).join('、')||'—'}</td>
+      <td style="font-size:10px">${RETENTION_LABELS[d.retention]||'保存3年'}</td>
+      <td style="font-size:10px">${d.note||''}</td>
+    </tr>`).join('');
+    document.getElementById('pt-footer').textContent=`本清單由人事室公文管理系統產出　列印：${d2.toLocaleString('zh-TW')}`;
+  });
+}
+function doPrint(){
+  document.getElementById('print-sign-list').style.display='none';
+  document.getElementById('print-general-list').style.display='block';
+  document.getElementById('print-doc').style.display='block';
+  window.print();
+  setTimeout(()=>document.getElementById('print-doc').style.display='none',500);
+}
+
+// ═══ SHEET ═══
+function closeSheet(id,e){if(!e||e.target===document.getElementById(id))document.getElementById(id).classList.remove('open');}
+
+// ═══ CANVAS ═══
+function initSigCv(cv,hintId){
+  const wrap=cv.parentElement;cv.width=wrap.clientWidth||300;
+  let drawing=false,lx=0,ly=0;
+  const hint=document.getElementById(hintId);
+  const getPos=e=>{const r=cv.getBoundingClientRect();const s=e.touches?e.touches[0]:e;return{x:(s.clientX-r.left)*cv.width/r.width,y:(s.clientY-r.top)*cv.height/r.height};};
+  const start=e=>{e.preventDefault();drawing=true;const{x,y}=getPos(e);lx=x;ly=y;if(hint)hint.classList.add('gone');};
+  const move=e=>{if(!drawing)return;e.preventDefault();const{x,y}=getPos(e);const ctx=cv.getContext('2d');ctx.strokeStyle='#2d5a3d';ctx.lineWidth=2.5;ctx.lineCap='round';ctx.lineJoin='round';ctx.beginPath();ctx.moveTo(lx,ly);ctx.lineTo(x,y);ctx.stroke();lx=x;ly=y;};
+  cv.addEventListener('mousedown',start);cv.addEventListener('mousemove',move);cv.addEventListener('mouseup',()=>drawing=false);
+  cv.addEventListener('touchstart',start,{passive:false});cv.addEventListener('touchmove',move,{passive:false});cv.addEventListener('touchend',()=>drawing=false);
+}
+
+// ═══ SETTINGS ═══
+function saveApiUrl(){
+  const url=document.getElementById('api-url-input').value.trim();
+  if(!url){toast('請貼上 Apps Script 網址');return;}
+  run(async()=>{
+    const res=await fetch(`${url}?action=ping`);const json=await res.json();
+    if(!json.success&&!json.data)throw new Error('連線失敗，請確認網址正確');
+    localStorage.setItem('docflow_api_url',url);_cache=null;
+    document.getElementById('api-status').textContent='✅ 連線成功！';
+    document.getElementById('api-status').style.color='var(--green)';
+    toast('✅ 已連線 Google Sheets');
+  });
+}
+
+// ═══ TOAST ═══
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2600);}
+
+// ═══ INIT ═══
+window.addEventListener('load',()=>{
+  const savedUrl=localStorage.getItem('docflow_api_url');
+  if(savedUrl)document.getElementById('api-url-input').value=savedUrl;
+  const p=new URLSearchParams(location.search);
+  if(p.has('unit')){deptUnit=decodeURIComponent(p.get('unit'));_pageHistory=['p-login'];showPage('p-dept');run(async()=>await initDept());}
+  if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
+});
+</script>
+</body>
+</html>
